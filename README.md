@@ -11,7 +11,7 @@ Et headless WordPress setup med Docker, der eksponerer indhold via WPGraphQL.
 ### 1. Klon repositoriet
 
 ```bash
-git clone 
+git clone https://github.com/naif2500/headless_opgave.git
 cd headless_opgave/headless_wordpress
 ```
 
