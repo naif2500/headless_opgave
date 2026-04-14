@@ -17,7 +17,7 @@ cd headless_opgave/headless_wordpress
 
 ### 2. Opret .env fil
 
-Opret en fil kaldet `.env` i projektmappen med følgende indhold:
+Opret en fil kaldet `.env` i `headless_wordpress/` mappen med følgende indhold:
 
 ```env
 MYSQL_DATABASE=wordpress
@@ -51,10 +51,40 @@ docker compose exec wordpress wp core install \
   --allow-root
 ```
 
-### 6. Installér WPGraphQL
+### 6. Installér WP-CLI i containeren
+
+```bash
+docker compose exec wordpress bash
+curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+chmod +x wp-cli.phar
+mv wp-cli.phar /usr/local/bin/wp
+exit
+```
+
+### 7. Installér WPGraphQL
 
 ```bash
 docker compose exec wordpress wp plugin install wp-graphql --activate --allow-root
+```
+
+Bekræft at det virker ved at åbne **http://localhost:8080/graphql** i din browser.
+
+## Next.js Frontend
+
+### 1. Opret .env.local fil
+
+Opret en fil kaldet `.env.local` i `headless_frontend/` mappen:
+
+```env
+NEXT_PUBLIC_WORDPRESS_API_URL=http://localhost:8080/graphql
+```
+
+### 2. Start frontend
+
+```bash
+cd ../headless_frontend
+npm install
+npm run dev
 ```
 
 ## Adgang
@@ -65,6 +95,7 @@ docker compose exec wordpress wp plugin install wp-graphql --activate --allow-ro
 | WP Admin | http://localhost:8080/wp-admin |
 | phpMyAdmin | http://localhost:8081 |
 | GraphQL endpoint | http://localhost:8080/graphql |
+| Next.js frontend | http://localhost:3000 |
 
 ## Standard legitimationsoplysninger
 
@@ -96,9 +127,18 @@ docker compose exec wordpress bash
 
 ```
 headless_opgave/
-└── headless_wordpress/
-    ├── docker-compose.yml
-    ├── .env                  # kun lokalt, ikke i git
-    ├── plugins/              # lokal plugin udvikling
-    └── themes/               # lokal tema udvikling
-```
+├── README.md
+├── headless_wordpress/     ← Docker WordPress backend
+│   ├── docker-compose.yml
+│   ├── .env                # kun lokalt, ikke i git
+│   ├── plugins/
+│   └── themes/
+└── headless_frontend/      ← Next.js frontend
+    ├── app/
+    │   ├── page.js
+    │   └── posts/
+    │       └── [slug]/
+    │           └── page.js
+    ├── lib/
+    │   └── api.js
+    └── .env.local          # kun lokalt, ikke i git
