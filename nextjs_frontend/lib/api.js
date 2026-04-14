@@ -1,20 +1,25 @@
 const API_URL = process.env.NEXT_PUBLIC_WORDPRESS_API_URL
 
-export async function getPosts() {
+export async function getBooks() {
   const res = await fetch(API_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       query: `
-        query GetPosts {
-          posts {
+        query GetBooks {
+          books {
             nodes {
               id
               title
               slug
-              date
+              price
+              authorName
               excerpt
-              content
+              featuredImage {
+                node {
+                  sourceUrl
+                }
+              }
             }
           }
         }
@@ -23,28 +28,11 @@ export async function getPosts() {
   })
 
   const json = await res.json()
-  return json.data.posts.nodes
-}
+  
+  if (json.errors) {
+    console.error(json.errors)
+    throw new Error('Failed to fetch API')
+  }
 
-export async function getPostBySlug(slug) {
-  const res = await fetch(API_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      query: `
-        query GetPost($slug: String!) {
-          postBy(slug: $slug) {
-            id
-            title
-            date
-            content
-          }
-        }
-      `,
-      variables: { slug }
-    })
-  })
-
-  const json = await res.json()
-  return json.data.postBy
+  return json.data.books.nodes
 }

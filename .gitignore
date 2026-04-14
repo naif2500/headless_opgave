@@ -1,0 +1,13 @@
+# Next.js
+nextjs_frontend/.next/
+nextjs_frontend/node_modules/
+nextjs_frontend/.env.local
+
+# WordPress / Docker
+# We ignore the actual data, but keep the folders
+headless_wordpress/db_data/
+headless_wordpress/wordpress/
+
+# OS files
+.DS_Store
+Thumbs.db
