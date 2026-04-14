@@ -14,6 +14,18 @@ return new class extends Migration
         Schema::create('books', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+            $table->string('title');
+            $table->date('publishing_date');
+            $table->string('description');
+            $table->string('image');
+            $table-> decimal('price', 8, 2);
+            $table->foreignId('genre_id')->constrained();
+            //Constrained er reference genre(id)=> genre.id, forsøger
+            // man at slette bog der har tilknytning til genre_id
+            // så ville den restrict.
+
+
+
         });
     }
 
