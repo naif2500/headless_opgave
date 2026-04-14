@@ -1,0 +1,20 @@
+# Environment variables (contain passwords!)
+.env
+
+# WordPress core (installed by Docker, don't track it)
+wp-content/uploads/
+wp-content/upgrade/
+wp-content/cache/
+
+# Don't track plugins installed via admin/WP-CLI
+wp-content/plugins/*
+!wp-content/plugins/your-custom-plugin/  # un-ignore if you write a custom one
+
+# Don't track default themes
+wp-content/themes/twenty*/
+
+# OS/editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
