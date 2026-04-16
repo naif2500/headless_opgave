@@ -14,8 +14,10 @@ export async function getBooks() {
               slug
               price
               authorName
+              publishingDate
               excerpt
               description
+              genre
               featuredImage {
                 node {
                   sourceUrl

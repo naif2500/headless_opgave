@@ -30,6 +30,9 @@ export default async function BookstorePage() {
             {/* Content Section */}
             <div className="p-6">
               <h2 className="text-xl font-bold text-gray-800 mb-2">{book.title}</h2>
+              <span>  
+                {book.genre || 'No genre available.'}, {book.publishingDate || 'No publish date'}
+              </span>
               <p className="text-sm text-blue-600 font-semibold uppercase tracking-wider mb-4">
                 By {book.authorName || 'Unknown Author'}
               </p>

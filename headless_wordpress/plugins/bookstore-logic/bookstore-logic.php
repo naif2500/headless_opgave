@@ -20,7 +20,7 @@ add_action('init', function() {
         'graphql_single_name' => 'book',
         'graphql_plural_name' => 'books',
         'menu_icon'   => 'dashicons-book-alt',
-        'supports'    => ['title', 'editor', 'thumbnail', 'excerpt', 'description', 'custom-fields']
+        'supports'    => ['title', 'editor', 'thumbnail', 'excerpt', 'description', 'genre', 'publishingDate', 'custom-fields']
     ]);
 });
 // 2. Register Custom Fields (Price/Author) to the GraphQL Schema
@@ -49,6 +49,22 @@ add_action('graphql_register_types', function() {
         'description' => 'The description of the book',
         'resolve' => function($post) {
             return get_post_meta($post->ID, 'book_description', true);
+        }
+    ]);
+    
+    register_graphql_field('Book', 'genre', [
+        'type' => 'String',
+        'description' => 'The genre of the book',
+        'resolve' => function($post) {
+            return get_post_meta($post->ID, 'book_genre', true);
+        }
+    ]);
+    
+    register_graphql_field('Book', 'publishingDate', [
+        'type' => 'String',
+        'description' => 'The publishing date of the book',
+        'resolve' => function($post) {
+            return get_post_meta($post->ID, 'book_publishing_date', true);
         }
     ]);
 });
