@@ -11,7 +11,7 @@ class Book extends Model
 {
     use HasFactory;
 
-    //en genre kan have mange bøger og en bog kan have mange genres
+    //en genre kan have mange bøger og en bog kan have en genre
     public function genre(): BelongsTo
     {
         return $this->belongsTo(Genre::class);

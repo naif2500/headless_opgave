@@ -17,14 +17,15 @@ class BookResource extends JsonResource
         return [
             "id" => $this->id,
             "title" => $this->title,
-            "author" => $this->whenLoaded("authors", function () {
-                return AuthorResource::collection($this->authors);
+            "author" => $this->whenLoaded("author", function () {
+                return AuthorResource::collection($this->author);
             }),
+            "image" => $this->image,
             "price" => $this->price,
             "description" => $this->description,
             "publishing_date" => $this->publishing_date,
-            "genre" => $this->whenLoaded("genres", function () {
-                return GenreResource::collection($this->genres);
+            "genre" => $this->whenLoaded("genre", function () {
+                return new GenreResource($this->genre);
             })
         ];
     }
