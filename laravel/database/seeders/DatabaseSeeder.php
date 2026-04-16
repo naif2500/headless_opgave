@@ -2,6 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\Author;
+use App\Models\Book;
+use App\Models\Genre;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -21,5 +24,9 @@ class DatabaseSeeder extends Seeder
             'name' => 'Test User',
             'email' => 'test@example.com',
         ]);
+
+        Genre::factory()->count(10)->create();
+        Author::factory()->count(12)->create();
+        Book::factory()->count(12)->create();
     }
 }
