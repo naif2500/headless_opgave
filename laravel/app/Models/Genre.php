@@ -11,9 +11,9 @@ class Genre extends Model
 {
     use HasFactory;
                          //skrives ogås i Udemy eksempel
-    public function Book(): HasMany
+    public function book(): HasMany
     {
-        return $this->hasMany(Book::Class);
+        return $this->hasMany(Book::class);
     }
      // Genre har ingen FK hos sig men sin egen pk er som FK i book table
 

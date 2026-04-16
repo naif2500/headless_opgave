@@ -10,15 +10,16 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Book extends Model
 {
     use HasFactory;
+
     //en genre kan have mange bøger og en bog kan have mange genres
- public function Genre(): BelongsTo
- {
-        return $this->belongsTo(Genre::Class);
+    public function genre(): BelongsTo
+    {
+        return $this->belongsTo(Genre::class);
     }
     // Book holder genre Fk
 
-    public function AuthourBook(){
-        return $this->hasMany(AuthourBook::Class);
+    public function author(){
+        return $this->belongsToMany(Author::class);
     }
     //tjek det her med chat, men book-tabel  id ligger i joiningtable som FK
 }

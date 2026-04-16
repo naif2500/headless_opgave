@@ -10,17 +10,11 @@ class Author extends Model
 
 {
     use HasFactory;
-public function AuthourBook(): HasMany
-{
-    return $this ->hasMany(AuthourBook::Class);
 
-
+    public function book(){
+        return $this->belongsToMany(Book::class);
     }
 
-    public function Book(){
-        return $this->hasManyThrough(Book::Class, AuthourBook::Class);
-
-    }
 }
 //Authors eget pk ligger som fk i joiningtable + booktable
 
