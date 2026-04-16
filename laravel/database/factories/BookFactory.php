@@ -41,7 +41,7 @@ class BookFactory extends Factory
         return [
             "title" => fake()->words(3, true),
             "publishing_date" => fake()->date(),
-            "description" => fake()->paragraph(),
+            "description" => fake()->paragraph(2),
             "image" => $images[$imageIndex++ % count($images)],
             "price" => fake()->randomFloat(2, 0, 99),
             "genre_id" => fake()->randomElement($genreIds)
