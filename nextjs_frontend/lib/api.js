@@ -15,6 +15,7 @@ export async function getBooks() {
               price
               authorName
               excerpt
+              description
               featuredImage {
                 node {
                   sourceUrl

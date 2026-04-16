@@ -13,8 +13,7 @@ export default async function BookstorePage() {
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {books.map((book) => (
           <article key={book.id} className="bg-white rounded-xl shadow-lg overflow-hidden hover:scale-105 transition-transform">
-            {/* Image Section */}
-            <div className="h-64 bg-gray-200 relative">
+               <div className="h-64 bg-gray-200 relative">
               {book.featuredImage?.node?.sourceUrl ? (
                 <img 
                   src={book.featuredImage.node.sourceUrl} 
@@ -34,6 +33,7 @@ export default async function BookstorePage() {
               <p className="text-sm text-blue-600 font-semibold uppercase tracking-wider mb-4">
                 By {book.authorName || 'Unknown Author'}
               </p>
+              <p> {book.description || 'No description available.'}</p>
               
               <div className="flex items-center justify-between mt-4">
                 <span className="text-2xl font-bold text-green-600">
