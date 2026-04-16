@@ -18,8 +18,8 @@ class Book extends Model
     }
     // Book holder genre Fk
 
-    public function author(){
-        return $this->belongsToMany(Author::class);
-    }
+    // public function author(){
+    //     return $this->belongsToMany(Author::class);
+    // }
     //tjek det her med chat, men book-tabel  id ligger i joiningtable som FK
 }
