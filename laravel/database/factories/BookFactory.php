@@ -34,7 +34,7 @@ class BookFactory extends Factory
             "https://images.unsplash.com/photo-1556695725-3cc4a29d4ef7?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8ODh8fGJvb2t8ZW58MHwxfDB8fHww"
         ];
 
-        $imageIndex = 0;
+        static $imageIndex = 0;
 
         $genreIds = DB::table("genres")->pluck("id");
 

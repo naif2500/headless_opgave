@@ -25,8 +25,14 @@ class DatabaseSeeder extends Seeder
             'email' => 'test@example.com',
         ]);
 
-        Genre::factory()->count(10)->create();
-        Author::factory()->count(12)->create();
-        Book::factory()->count(12)->create();
+        $genres = Genre::factory()->count(10)->create();
+        $authors = Author::factory()->count(12)->create();
+        $books = Book::factory()->count(12)->create();
+
+        foreach ($books as $book) {
+            $book->author()->sync(
+                $authors->random(rand(1, 3))->pluck('id')->toArray()
+            );
+        }
     }
 }
