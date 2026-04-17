@@ -13,11 +13,15 @@ class BookController extends Controller
         return BookResource::collection($books);
     }
 
-    public function show() {
-
+    public function show(Book $book) {
+        return new BookResource($book);
     }
 
-    public function destroy() {
+    public function destroy(Book $book) {
+    $book->delete();
+return response()->json([
+'Message' => 'Book deleted successfully']);
 
     }
 }
+//https://www.udemy.com/course/laravel-beginner-fundamentals/learn/lecture/37619738#questions 7:09
