@@ -21,7 +21,7 @@ class GenreFactory extends Factory
 
         $genres = ["thriller", "romance", "fantasy", "sci-fi", "horror", "cookbook", "biography", "history", "poetry", "crime"];
 
-        $genreIndex = 0;
+        static $genreIndex = 0;
 
         return [
             "name" => $genres[$genreIndex++ % count($genres)]
