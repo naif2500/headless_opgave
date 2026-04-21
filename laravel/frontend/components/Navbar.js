@@ -1,0 +1,22 @@
+'use client'
+
+import Link from 'next/link'
+import { useCart } from '@/context/CartContext'
+
+export default function Navbar() {
+  const { cartCount } = useCart()
+
+  return (
+    <nav className="navbar">
+      <Link href="/" className="navbar-logo">MJJS</Link>
+      <div className="navbar-links">
+        <Link href="/books" className="navbar-link">Gennemse Bøger</Link>
+        <Link href="/" className="navbar-link">Nye Ankomster</Link>
+      </div>
+      <Link href="/cart" className="cart-btn">
+         Kurv
+        {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
+      </Link>
+    </nav>
+  )
+}
