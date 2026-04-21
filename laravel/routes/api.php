@@ -15,5 +15,6 @@ Route::apiResource("orders", OrderController::class)->only(["index", "store", "u
 // Route::post('/login',[AuthController::class, 'login']);
 
 Route::post('/login',[AuthController::class, 'login',]);
-Route::post('/signout', [AuthController::class, 'signout']);
+Route::post('/logout', [AuthController::class, 'logout'])
+->middleware('auth:sanctum');
 // Route::post('/books', [BookController::class, 'store'])->middleware('auth:sanctum');
