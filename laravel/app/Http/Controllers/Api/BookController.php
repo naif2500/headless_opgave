@@ -29,25 +29,27 @@ use CanLoadRelationships;
         );
     }
 
-    public function store(Request $books)
-    {
-        Gate::authorize('create', Book::class);
-        $book = Book::create([
-            ...$books->validate([
-                 'title' => 'required|string',
-   'description' => 'required|string',
-         'publishing_date' => 'required|date',
-         'price' => 'required|numeric',
-         'genre_id' => 'required|exists:genres,id',
-         'image' => 'nullable|url',
-         'author_ids' => 'required|array',
-         'author_ids.*' => 'exists:authors,id'
-            ]),
-            'user_id' => $books->user()->id
-        ]);
+    public function store(Request $request)
+{
+    // Gate::authorize('create', Book::class);
 
-        return new BookResource($this->loadRelationships($book));
-    }
+    $book = Book::create([
+        ...$request->validate([
+            'title' => 'required|string',
+            'description' => 'required|string',
+            'publishing_date' => 'required|date',
+            'price' => 'required|numeric',
+            'genre_id' => 'required|exists:genres,id',
+            'image' => 'nullable|url',
+            'author_ids' => 'required|array',
+            'author_ids.*' => 'exists:authors,id'
+        ]),
+
+        'user_id' => $request->user()->id
+    ]);
+
+    return new BookResource($this->loadRelationships($book));
+}
 
 
 //     public function store(Request $request)

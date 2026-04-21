@@ -33,4 +33,14 @@ class Book extends Model
 } //En bog tilhører en user kun
 
     //tjek det her med chat, men book-tabel  id ligger i joiningtable som FK
-}
+ protected $fillable = [
+        'title',
+        'description',
+        'publishing_date',
+        'price',
+        'genre_id',
+        'image',
+        'user_id'
+    ];
+
+    }
