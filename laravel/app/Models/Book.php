@@ -26,5 +26,11 @@ class Book extends Model
     {
         return $this->belongsToMany(Author::class);
     }
+
+    public function user(): BelongsTo
+{
+    return $this->belongsTo(User::class);
+} //En bog tilhører en user kun
+
     //tjek det her med chat, men book-tabel  id ligger i joiningtable som FK
 }
