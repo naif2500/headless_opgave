@@ -3,8 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreOrderRequest;
-use App\Http\Requests\UpdateOrderRequest;
+use App\Http\Requests\OrderRequest;
 use App\Http\Resources\OrderResource;
 use App\Models\Order;
 
@@ -16,7 +15,7 @@ class OrderController extends Controller
         return OrderResource::collection($orders);
     }
 
-    public function store(StoreOrderRequest $request) {
+    public function store(OrderRequest $request) {
         $bookIds = $request->validated("book_ids");
 
         $order = Order::create(['user_id' => auth()->id()]);
@@ -26,7 +25,7 @@ class OrderController extends Controller
         return response()->json(['message' => 'Order created'], 201);
     }
 
-    public function update(Order $order, UpdateOrderRequest $request) {
+    public function update(Order $order, OrderRequest $request) {
         $orderId = $order->id;
 
         $bookIds = $request->validated("book_ids");
