@@ -26,8 +26,8 @@ class OrderController extends Controller
         return response()->json(['message' => 'Order created'], 201);
     }
 
-    public function update(UpdateOrderRequest $request) {
-        $orderId = $request->validated("id");
+    public function update(Order $order, UpdateOrderRequest $request) {
+        $orderId = $order->id;
 
         $bookIds = $request->validated("book_ids");
 

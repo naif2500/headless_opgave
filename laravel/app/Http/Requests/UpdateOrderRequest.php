@@ -24,7 +24,6 @@ class UpdateOrderRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "id" => ["required" | "integer" | "exists:orders,id"],
             "book_ids" => ["array", "required"],
             "book_ids.*" => ["integer", "exists:books,id"]
         ];
