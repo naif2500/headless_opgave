@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Api\Controllers\Controller;
+// use App\Http\Api\Controllers\Controller;
+use App\Http\Controllers\Controller;
 use App\Http\Resources\BookResource;
+use App\Http\Resources\Traits\CanLoadRelationships;
 use App\Models\Book;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -15,36 +17,74 @@ class BookController extends Controller
 //     {
 //         $this->middleware('auth:sanctum')->except(['index', 'show']);
 //     } //min index + show er public + at man ike beøver token (login) for at kunne se dem
+use CanLoadRelationships;
+    private array $books = ['user', 'books', 'books.user'];
 
-    public function store(Request $request)
-{
-    $validated = $request->validate([
-        'title' => 'required|string',
-        'description' => 'required|string',
-        'publishing_date' => 'required|date',
-        'price' => 'required|numeric',
-        'genre_id' => 'required|exists:genres,id',
-        'image' => 'nullable|url',
-        'author_ids' => 'required|array',
-        'author_ids.*' => 'exists:authors,id'
-    ]);
+    function index(){
+    Gate::authorize('viewAny', Book::class);
+            $query = $this->loadRelationships(Book::query());
 
-    $book = Book::create([
-        ...$validated,
-        'user_id' => $request->user()->id
-    ]);
-
-    if ($request->has('author_ids')) {
-        $book->authors()->attach($request->author_ids);
+ return BookResource::collection(
+            $query->latest()->paginate()
+        );
     }
 
-    return new BookResource($book->load(['authors', 'genre']));
-}
+    public function store(Request $books)
+    {
+        Gate::authorize('create', Book::class);
+        $book = Book::create([
+            ...$books->validate([
+                 'title' => 'required|string',
+   'description' => 'required|string',
+         'publishing_date' => 'required|date',
+         'price' => 'required|numeric',
+         'genre_id' => 'required|exists:genres,id',
+         'image' => 'nullable|url',
+         'author_ids' => 'required|array',
+         'author_ids.*' => 'exists:authors,id'
+            ]),
+            'user_id' => $books->user()->id
+        ]);
 
-    public function index() {
-        $books = Book::with(["author", "genre"])->get();
-        return BookResource::collection($books);
+        return new BookResource($this->loadRelationships($book));
     }
+
+
+//     public function store(Request $request)
+// {
+//     $validated = $request->validate([
+//         'title' => 'required|string',
+//         'description' => 'required|string',
+//         'publishing_date' => 'required|date',
+//         'price' => 'required|numeric',
+//         'genre_id' => 'required|exists:genres,id',
+//         'image' => 'nullable|url',
+//         'author_ids' => 'required|array',
+//         'author_ids.*' => 'exists:authors,id'
+//     ]);
+
+//     $book = Book::create([
+//         ...$validated,
+//         'user_id' => $request->user()->id
+//     ]);
+
+//     if ($request->has('author_ids')) {
+//         $book->authors()->attach($request->author_ids);
+//     }
+
+//     return new BookResource($book->load(['authors', 'genre']));
+// }
+
+
+
+
+// Marthas gamle (som virker skal IKKE slettes)
+    // public function index() {
+    //     $books = Book::with(["author", "genre"])->get();
+    //     return BookResource::collection($books);
+    // }
+
+    //Marthas END
 
     public function show(Book $book) {
         return new BookResource($book);
