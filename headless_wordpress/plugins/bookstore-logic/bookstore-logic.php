@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Bookstore Logic
-Description: Registers Books CPT and Custom GraphQL Fields for Headless React
+Description: Registers Books CPT and REST API fields for Headless React
 Version: 1.0
 Author: Team Bookstore
 */
@@ -13,58 +13,33 @@ add_action('init', function() {
             'name' => 'Books',
             'singular_name' => 'Book'
         ],
-        'public'      => true,
-        'has_archive' => true,
-        'show_in_rest' => true,
-        'show_in_graphql' => true,
-        'graphql_single_name' => 'book',
-        'graphql_plural_name' => 'books',
-        'menu_icon'   => 'dashicons-book-alt',
-        'supports'    => ['title', 'editor', 'thumbnail', 'excerpt', 'description', 'genre', 'publishingDate', 'custom-fields']
+        'public'       => true,
+        'has_archive'  => true,
+        'show_in_rest' => true, 
+        'menu_icon'    => 'dashicons-book-alt',
+        'supports'     => ['title', 'editor', 'thumbnail', 'excerpt', 'custom-fields']
     ]);
 });
-// 2. Register Custom Fields (Price/Author) to the GraphQL Schema
-add_action('graphql_register_types', function() {
-    
-    // Add "price" field to the "Book" type in GraphQL
-    register_graphql_field('Book', 'price', [
-        'type' => 'String',
-        'description' => 'The price of the book',
-        'resolve' => function($post) {
-            return get_post_meta($post->ID, 'book_price', true);
-        }
-    ]);
 
-    // Add "authorName" field to the "Book" type in GraphQL
-    register_graphql_field('Book', 'authorName', [
-        'type' => 'String',
-        'description' => 'The author of the book',
-        'resolve' => function($post) {
-            return get_post_meta($post->ID, 'book_author', true);
-        }
-    ]);
+// 2. Register Custom Fields to the REST API
+add_action('rest_api_init', function () {
     
-    register_graphql_field('Book', 'description', [
-        'type' => 'String',
-        'description' => 'The description of the book',
-        'resolve' => function($post) {
-            return get_post_meta($post->ID, 'book_description', true);
-        }
-    ]);
-    
-    register_graphql_field('Book', 'genre', [
-        'type' => 'String',
-        'description' => 'The genre of the book',
-        'resolve' => function($post) {
-            return get_post_meta($post->ID, 'book_genre', true);
-        }
-    ]);
-    
-    register_graphql_field('Book', 'publishingDate', [
-        'type' => 'String',
-        'description' => 'The publishing date of the book',
-        'resolve' => function($post) {
-            return get_post_meta($post->ID, 'book_publishing_date', true);
-        }
-    ]);
+    // Helper function to define the fields to keep code clean
+    $fields = [
+        'price'          => 'book_price',
+        'authorName'     => 'book_author',
+        'description'    => 'book_description',
+        'genre'          => 'book_genre',
+        'publishingDate' => 'book_publishing_date'
+    ];
+
+    foreach ($fields as $fieldName => $metaKey) {
+        register_rest_field('book', $fieldName, [
+            'get_callback' => function($post_arr) use ($metaKey) {
+                return get_post_meta($post_arr['id'], $metaKey, true);
+            },
+            'update_callback' => null,
+            'schema' => null,
+        ]);
+    }
 });

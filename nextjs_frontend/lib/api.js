@@ -1,41 +1,19 @@
-const API_URL = process.env.NEXT_PUBLIC_WORDPRESS_API_URL
-
+// lib/api.js
 export async function getBooks() {
-  const res = await fetch(API_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      query: `
-        query GetBooks {
-          books {
-            nodes {
-              id
-              title
-              slug
-              price
-              authorName
-              publishingDate
-              excerpt
-              description
-              genre
-              featuredImage {
-                node {
-                  sourceUrl
-                }
-              }
-            }
-          }
-        }
-      `
-    })
-  })
+  // 1. The ?_embed tells WordPress to send the image data along with the post
+  const res = await fetch('http://localhost:8080/wp-json/wp/v2/book?_embed');
+  const data = await res.json();
 
-  const json = await res.json()
-  
-  if (json.errors) {
-    console.error(json.errors)
-    throw new Error('Failed to fetch API')
-  }
-
-  return json.data.books.nodes
+  // 2. Map the complex REST response into a clean, flat object
+  return data.map(book => ({
+    id: book.id,
+    title: book.title.rendered,
+    price: book.price,
+    authorName: book.authorName,
+    description: book.description,
+    genre: book.genre,
+    publishingDate: book.publishingDate,
+    // This looks for the image inside the _embedded object
+    imageUrl: book._embedded?.['wp:featuredmedia']?.[0]?.source_url || null
+  }));
 }
