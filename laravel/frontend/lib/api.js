@@ -1,13 +1,11 @@
 // lib/api.js
 
 export async function getBooks() {
-    const res = await fetch(`${process.env.BASE_URL}/api/books`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/books`, {
         method: "GET",
     });
 
     const json = await res.json();
-
-    console.log("json", json);
 
     return json;
 }
