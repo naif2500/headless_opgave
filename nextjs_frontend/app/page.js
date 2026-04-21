@@ -1,60 +1,87 @@
-import { getBooks } from '../lib/api';
+import { getBooks } from "@/lib/api";
+import Link from "next/link";
+import Image from "next/image";
 
-export default async function BookstorePage() {
+export default async function Home() {
   const books = await getBooks();
+  const featured = books.slice(0, 5);
+  const popular = books.slice(5, 10);
 
   return (
-    <div className="min-h-screen bg-gray-100 p-8">
-      <header className="mb-12 text-center">
-        <h1 className="text-4xl font-extrabold text-gray-900">📚 The Headless Bookstore</h1>
-        <p className="text-gray-600 mt-2">Powered by WordPress REST API</p>
-      </header>
+    <main>
+      {/* Hero */}
+      <section className="hero">
+        <div className="hero-overlay">
+          <div className="hero-tag">Kuratérte brugte bøger</div>
+          <h1 className="hero-title">Historier værd at læse, to gange.</h1>
+          <p className="hero-sub">
+            Opdag pre-loved bøger i fremragende stand — håndplukket til
+            nysgerrige sind.
+          </p>
+          <Link href="/books" className="hero-cta">
+            Gennemse samling
+          </Link>
+        </div>
+      </section>
 
-      <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {books.map((book) => (
-          <article key={book.id} className="bg-white rounded-xl shadow-lg overflow-hidden hover:scale-105 transition-transform">
-            
-            {/* Image Section - Now much cleaner! */}
-            <div className="h-64 bg-gray-200 relative">
-              {book.imageUrl ? (
-                <img 
-                  src={book.imageUrl} 
-                  alt={book.title}
-                  className="w-full h-full object-cover"
-                />
-              ) : (
-                <div className="flex items-center justify-center h-full text-gray-400">
-                  No Cover Image
-                </div>
-              )}
-            </div>
+      {/* Featured carousel */}
+      <section className="section">
+        <div className="section-header">
+          <h2 className="section-title">Udvalgte bøger</h2>
+          <Link href="/books" className="section-link">
+            Se alle →
+          </Link>
+        </div>
+        <div className="carousel">
+          {featured.map((book) => (
+            <BookCard key={book.id} book={book} />
+          ))}
+        </div>
+      </section>
 
-            {/* Content Section */}
-            <div className="p-6">
-              <h2 className="text-xl font-bold text-gray-800 mb-2">{book.title}</h2>
-              
-              <div className="text-sm text-gray-500 mb-2 italic">
-                {book.genre || 'No genre'}, {book.publishingDate || 'No date'}
-              </div>
+      {/* Popular carousel */}
+      {popular.length > 0 && (
+        <section className="section section-alt">
+          <div className="section-header">
+            <h2 className="section-title">Populære valg</h2>
+            <Link href="/books" className="section-link">
+              Se alle →
+            </Link>
+          </div>
+          <div className="carousel">
+            {popular.map((book) => (
+              <BookCard key={book.id} book={book} />
+            ))}
+          </div>
+        </section>
+      )}
+    </main>
+  );
+}
 
-              <p className="text-sm text-blue-600 font-semibold uppercase tracking-wider mb-4">
-                By {book.authorName || 'Unknown Author'}
-              </p>
-              
-              <p className="text-gray-700 mb-4">{book.description || 'No description available.'}</p>
-              
-              <div className="flex items-center justify-between mt-4">
-                <span className="text-2xl font-bold text-green-600">
-                  {book.price ? `${book.price}` : 'Price TBD'}
-                </span>
-                <button className="bg-gray-900 text-white px-4 py-2 rounded-lg hover:bg-gray-700">
-                  View Details
-                </button>
-              </div>
-            </div>
-          </article>
-        ))}
+function BookCard({ book }) {
+  return (
+    <Link href={`/books/${book.slug}`} className="book-card">
+      <div className="book-card-img">
+        {book.featuredImage?.node?.sourceUrl ? (
+          <Image
+            src={book.featuredImage.node.sourceUrl}
+            alt={book.title}
+            fill
+            style={{ objectFit: "cover" }}
+          />
+        ) : (
+          <span className="book-placeholder">📖</span>
+        )}
       </div>
-    </div>
+      <div className="book-card-body">
+        <div className="book-card-title">{book.title}</div>
+        <div className="book-card-author">{book.authorName}</div>
+        <div className="book-card-footer">
+          <span className="book-card-price">{book.price} kr</span>
+          <span className="book-card-genre">{book.genre}</span>
+        </div>
+      </div>
+    </Link>
   );
 }
