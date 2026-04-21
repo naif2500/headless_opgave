@@ -54,7 +54,7 @@ export default function BooksPage() {
                     {filtered.map((book) => (
                         <Link
                             key={book.id}
-                            href={`/books/${book.slug}`}
+                            href={`/books/${book.id}`}
                             className="book-card"
                         >
                             <div className="book-card-img">

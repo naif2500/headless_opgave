@@ -11,47 +11,14 @@ export async function getBooks() {
 }
 
 export async function getBookBySlug(slug) {
-    const body = JSON.stringify({
-        query: `
-      query GetBook($slug: String!) {
-        bookBy(slug: $slug) {
-          id
-          title
-          slug
-          price
-          authorName
-          publishingDate
-          excerpt
-          description
-          genre
-          featuredImage {
-            node {
-              sourceUrl
-            }
-          }
-        }
-      }
-    `,
-        variables: { slug },
-    });
+    const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/books/${slug}`,
+        {
+            method: "GET",
+        },
+    );
 
-    console.log("getBookBySlug body:", body);
+    const json = await res.json();
 
-    const res = await fetch(API_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: body,
-    });
-
-    const text = await res.text();
-    console.log("getBookBySlug response:", text.slice(0, 500));
-
-    const json = JSON.parse(text);
-
-    if (json.errors) {
-        console.error(json.errors);
-        throw new Error("Failed to fetch book");
-    }
-
-    return json.data.bookBy;
+    return json;
 }
