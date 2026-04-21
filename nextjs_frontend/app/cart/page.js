@@ -10,13 +10,13 @@ export default function CartPage() {
 
   return (
     <div className="page">
-      <h1 className="page-title">Your cart</h1>
+      <h1 className="page-title">Din kurv</h1>
 
       {cart.length === 0 ? (
         <div className="empty-cart">
           <div className="empty-cart-icon">🛒</div>
-          <p>Your cart is empty</p>
-          <Link href="/books" className="hero-cta">Browse books</Link>
+          <p>Din kurv er tom</p>
+          <Link href="/books" className="hero-cta">Gennemse bøger</Link>
         </div>
       ) : (
         <div className="cart-layout">
@@ -51,7 +51,7 @@ export default function CartPage() {
           </div>
 
           <div className="order-summary">
-            <div className="summary-title">Order summary</div>
+            <div className="summary-title">Ordresammendrag</div>
             {cart.map(item => (
               <div key={item.book.id} className="summary-row">
                 <span>{item.book.title} × {item.qty}</span>
@@ -59,17 +59,17 @@ export default function CartPage() {
               </div>
             ))}
             <div className="summary-row">
-              <span>Shipping</span>
-              <span>{shipping === 0 ? 'Free' : `${shipping} kr`}</span>
+              <span>Levering</span>
+              <span>{shipping === 0 ? 'Gratis' : `${shipping} kr`}</span>
             </div>
             <div className="summary-row total">
               <span>Total</span>
               <span>{cartTotal + shipping} kr</span>
             </div>
             {shipping > 0 && (
-              <p className="shipping-note">Free shipping on orders over 200 kr</p>
+              <p className="shipping-note">Gratis levering på ordrer over 200 kr</p>
             )}
-            <Link href="/checkout" className="checkout-btn">Proceed to checkout</Link>
+            <Link href="/checkout" className="checkout-btn">Gå til kassen</Link>
           </div>
         </div>
       )}

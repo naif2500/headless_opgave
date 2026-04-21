@@ -10,11 +10,11 @@ export default function Navbar() {
     <nav className="navbar">
       <Link href="/" className="navbar-logo">MJJS</Link>
       <div className="navbar-links">
-        <Link href="/books" className="navbar-link">Browse Books</Link>
-        <Link href="/" className="navbar-link">New Arrivals</Link>
+        <Link href="/books" className="navbar-link">Gennemse Bøger</Link>
+        <Link href="/" className="navbar-link">Nye Ankomster</Link>
       </div>
       <Link href="/cart" className="cart-btn">
-         Cart
+         Kurv
         {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
       </Link>
     </nav>

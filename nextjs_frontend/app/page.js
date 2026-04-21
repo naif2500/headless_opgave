@@ -12,18 +12,18 @@ export default async function Home() {
       {/* Hero */}
       <section className="hero">
         <div className="hero-overlay">
-          <div className="hero-tag">Curated second-hand books</div>
-          <h1 className="hero-title">Stories worth reading, twice.</h1>
-          <p className="hero-sub">Discover pre-loved books in excellent condition — hand-picked for curious minds.</p>
-          <Link href="/books" className="hero-cta">Browse collection</Link>
+          <div className="hero-tag">Kuratérte brugte bøger</div>
+          <h1 className="hero-title">Historier værd at læse, to gange.</h1>
+          <p className="hero-sub">Opdag pre-loved bøger i fremragende stand — håndplukket til nysgerrige sind.</p>
+          <Link href="/books" className="hero-cta">Gennemse samling</Link>
         </div>
       </section>
 
       {/* Featured carousel */}
       <section className="section">
         <div className="section-header">
-          <h2 className="section-title">Featured books</h2>
-          <Link href="/books" className="section-link">View all →</Link>
+          <h2 className="section-title">Udvalgte bøger</h2>
+          <Link href="/books" className="section-link">Se alle →</Link>
         </div>
         <div className="carousel">
           {featured.map(book => (
@@ -36,8 +36,8 @@ export default async function Home() {
       {popular.length > 0 && (
         <section className="section section-alt">
           <div className="section-header">
-            <h2 className="section-title">Popular picks</h2>
-            <Link href="/books" className="section-link">View all →</Link>
+            <h2 className="section-title">Populære valg</h2>
+            <Link href="/books" className="section-link">Se alle →</Link>
           </div>
           <div className="carousel">
             {popular.map(book => (

@@ -3,11 +3,11 @@ import Link from 'next/link'
 export default function SuccessPage() {
   return (
     <div className="success-page">
-      <h1 className="success-title">Order confirmed!</h1>
+      <h1 className="success-title">Ordre bekræftet!</h1>
       <p className="success-sub">
-        Thank you for your purchase. You will receive a confirmation email shortly with your order details.
+        Tak for dit køb. Du vil modtage en bekræftelsesemail snart med dine ordredetaljer.
       </p>
-      <Link href="/books" className="hero-cta">Continue shopping</Link>
+      <Link href="/books" className="hero-cta">Fortsæt med at handle</Link>
     </div>
   )
 }

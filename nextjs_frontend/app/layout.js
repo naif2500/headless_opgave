@@ -3,8 +3,8 @@ import Navbar from '@/components/Navbar'
 import './globals.css'
 
 export const metadata = {
-  title: 'Folio — Second-hand Bookstore',
-  description: 'Curated second-hand books',
+  title: 'Folio — Brugte Boghandel',
+  description: 'Kuratérte brugte bøger',
 }
 
 export default function RootLayout({ children }) {

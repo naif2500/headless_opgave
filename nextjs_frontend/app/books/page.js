@@ -26,8 +26,8 @@ export default function BooksPage() {
 
   return (
     <div className="page">
-      <h1 className="page-title">All Books</h1>
-      <p className="page-sub">{books.length} titles available</p>
+      <h1 className="page-title">Alle Bøger</h1>
+      <p className="page-sub">{books.length} titler tilgængelige</p>
 
       <div className="filter-bar">
         {genres.map(g => (
@@ -42,7 +42,7 @@ export default function BooksPage() {
       </div>
 
       {loading ? (
-        <div className="loading">Loading books...</div>
+        <div className="loading">Indlæser bøger...</div>
       ) : (
         <div className="books-grid">
           {filtered.map(book => (

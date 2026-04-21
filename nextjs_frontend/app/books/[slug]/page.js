@@ -14,11 +14,11 @@ function conditionColor(val) {
 }
 
 function conditionLabel(val) {
-  if (val >= 85) return 'As good as new'
-  if (val >= 70) return 'Very good'
-  if (val >= 50) return 'Good'
-  if (val >= 30) return 'Fair'
-  return 'Poor'
+  if (val >= 85) return 'Som ny'
+  if (val >= 70) return 'Meget god'
+  if (val >= 50) return 'God'
+  if (val >= 30) return 'Rimelig'
+  return 'Dårlig'
 }
 
 function ConditionMeter({ value }) {
@@ -27,15 +27,15 @@ function ConditionMeter({ value }) {
   return (
     <div className="condition-wrapper">
       <div className="condition-label">
-        <span>Book condition</span>
+        <span>Bogtilstand</span>
         <span className="condition-text" style={{ color }}>{conditionLabel(num)}</span>
       </div>
       <div className="condition-bar-bg">
         <div className="condition-bar-fill" style={{ width: `${num}%`, background: color }} />
       </div>
       <div className="condition-scale">
-        <span>Poor</span>
-        <span>As good as new</span>
+        <span>Dårlig</span>
+        <span>Som ny</span>
       </div>
     </div>
   )
@@ -62,8 +62,8 @@ export default function BookPage({ params }) {
     setTimeout(() => setAdded(false), 2000)
   }
 
-  if (loading) return <div className="page"><div className="loading">Loading...</div></div>
-  if (!book) return <div className="page"><p>Book not found.</p></div>
+  if (loading) return <div className="page"><div className="loading">Indlæser...</div></div>
+  if (!book) return <div className="page"><p>Bogen blev ikke fundet.</p></div>
 
   const images = book.featuredImage?.node?.sourceUrl
     ? [book.featuredImage.node.sourceUrl]
@@ -72,9 +72,9 @@ export default function BookPage({ params }) {
   return (
     <div className="page">
       <div className="breadcrumbs">
-        <Link href="/" className="breadcrumb-link">Home</Link>
+        <Link href="/" className="breadcrumb-link">Hjem</Link>
         <span className="breadcrumb-sep">/</span>
-        <Link href="/books" className="breadcrumb-link">Books</Link>
+        <Link href="/books" className="breadcrumb-link">Bøger</Link>
         <span className="breadcrumb-sep">/</span>
         <span>{book.title}</span>
       </div>
@@ -111,9 +111,9 @@ export default function BookPage({ params }) {
         <div>
           {book.genre && <span className="product-genre">{book.genre}</span>}
           <h1 className="product-title">{book.title}</h1>
-          <p className="product-author">by {book.authorName}</p>
+          <p className="product-author">af {book.authorName}</p>
           {book.publishingDate && (
-            <p className="product-pubdate">Published: {book.publishingDate}</p>
+            <p className="product-pubdate">Udgivet: {book.publishingDate}</p>
           )}
           <p className="product-desc">
             {book.description || (book.excerpt && book.excerpt.replace(/<[^>]*>/g, ''))}
@@ -123,7 +123,7 @@ export default function BookPage({ params }) {
             className={`add-to-cart${added ? ' added' : ''}`}
             onClick={handleAddToCart}
           >
-            {added ? '✓ Added to cart' : 'Add to cart'}
+            {added ? '✓ Tilføjet til kurv' : 'Tilføj til kurv'}
           </button>
           <ConditionMeter value={book.condition || 80} />
         </div>
