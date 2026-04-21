@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Order extends Model
 {
+    protected $fillable = ["user_id"];
+
     public function user(): BelongsTo {
         return $this->belongsTo(User::class);
     }
