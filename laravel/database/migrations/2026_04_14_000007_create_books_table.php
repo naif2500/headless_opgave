@@ -24,7 +24,7 @@ return new class extends Migration
             // man at slette bog der har tilknytning til genre_id
             // så ville den restrict.
 
-
+            $table->foreignId('user_id')->constrained();
 
 
         });
