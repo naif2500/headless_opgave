@@ -6,13 +6,15 @@ use App\Http\Api\Controllers\Controller;
 use App\Http\Resources\BookResource;
 use App\Models\Book;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
+
 
 class BookController extends Controller
 {
-public function __construct()
-    {
-        $this->middleware('auth:sanctum')->except(['index', 'show']);
-    } //min index + show er public + at man ike beøver token (login) for at kunne se dem
+// public function __construct()
+//     {
+//         $this->middleware('auth:sanctum')->except(['index', 'show']);
+//     } //min index + show er public + at man ike beøver token (login) for at kunne se dem
 
     public function store(Request $request)
 {
@@ -59,6 +61,12 @@ return response()->json([
 //
 
 
+// Gates are most applicable to actions that are not
+//  related to any model or resource, such as
+//  viewing an administrator dashboard. In contrast,
+//  policies should be used when you wish to authorize an
+//  action for a particular model or resource.
+// https://laravel.com/docs/11.x/authorization#writing-gates
 
 // index() - Se alle bøger
 // show() - Se en bog
