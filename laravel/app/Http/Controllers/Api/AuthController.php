@@ -36,11 +36,11 @@ class AuthController extends Controller
             'token' => $token
         ]);
     }
-    public function signout(Request $request)
-    {
-        $request->user()->currentAccessToken()->delete();
-
-        return response()->json([
-            'message' => 'Signed out successfully'
-        ]);
-}}
+    public function logout(Request $request)
+{
+    $request-> user()->tokens()->delete();
+    return  response ()->json([
+        'message' => 'Du er logget ud'
+    ]);
+}
+}
