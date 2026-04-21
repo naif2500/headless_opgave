@@ -47,4 +47,8 @@ class BookFactory extends Factory
             "genre_id" => fake()->randomElement($genreIds)
         ];
     }
+
+
+
+
 }

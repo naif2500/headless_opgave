@@ -1,5 +1,6 @@
 <?php
 
+namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -35,4 +36,11 @@ class AuthController extends Controller
             'token' => $token
         ]);
     }
-}
+    public function signout(Request $request)
+    {
+        $request->user()->currentAccessToken()->delete();
+
+        return response()->json([
+            'message' => 'Signed out successfully'
+        ]);
+}}
