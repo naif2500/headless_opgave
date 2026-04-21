@@ -1,55 +1,78 @@
-import { getBooks } from '../lib/api'; // Ensure this path matches your file structure
+import { getBooks } from '@/lib/api'
+import Link from 'next/link'
+import Image from 'next/image'
 
-export default async function BookstorePage() {
-  const books = await getBooks();
+export default async function Home() {
+  const books = await getBooks()
+  const featured = books.slice(0, 5)
+  const popular = books.slice(5, 10)
 
   return (
-    <div className="min-h-screen bg-gray-100 p-8">
-      <header className="mb-12 text-center">
-        <h1 className="text-4xl font-extrabold text-gray-900">📚 The Headless Bookstore</h1>
-        <p className="text-gray-600 mt-2">Powered by WordPress & Next.js</p>
-      </header>
+    <main>
+      {/* Hero */}
+      <section className="hero">
+        <div className="hero-overlay">
+          <div className="hero-tag">Curated second-hand books</div>
+          <h1 className="hero-title">Stories worth reading, twice.</h1>
+          <p className="hero-sub">Discover pre-loved books in excellent condition — hand-picked for curious minds.</p>
+          <Link href="/books" className="hero-cta">Browse collection</Link>
+        </div>
+      </section>
 
-      <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {books.map((book) => (
-          <article key={book.id} className="bg-white rounded-xl shadow-lg overflow-hidden hover:scale-105 transition-transform">
-               <div className="h-64 bg-gray-200 relative">
-              {book.featuredImage?.node?.sourceUrl ? (
-                <img 
-                  src={book.featuredImage.node.sourceUrl} 
-                  alt={book.title}
-                  className="w-full h-full object-cover"
-                />
-              ) : (
-                <div className="flex items-center justify-center h-full text-gray-400">
-                  No Cover Image
-                </div>
-              )}
-            </div>
+      {/* Featured carousel */}
+      <section className="section">
+        <div className="section-header">
+          <h2 className="section-title">Featured books</h2>
+          <Link href="/books" className="section-link">View all →</Link>
+        </div>
+        <div className="carousel">
+          {featured.map(book => (
+            <BookCard key={book.id} book={book} />
+          ))}
+        </div>
+      </section>
 
-            {/* Content Section */}
-            <div className="p-6">
-              <h2 className="text-xl font-bold text-gray-800 mb-2">{book.title}</h2>
-              <span>  
-                {book.genre || 'No genre available.'}, {book.publishingDate || 'No publish date'}
-              </span>
-              <p className="text-sm text-blue-600 font-semibold uppercase tracking-wider mb-4">
-                By {book.authorName || 'Unknown Author'}
-              </p>
-              <p> {book.description || 'No description available.'}</p>
-              
-              <div className="flex items-center justify-between mt-4">
-                <span className="text-2xl font-bold text-green-600">
-                  {book.price ? `${book.price}` : 'Price TBD'}
-                </span>
-                <button className="bg-gray-900 text-white px-4 py-2 rounded-lg hover:bg-gray-700">
-                  View Details
-                </button>
-              </div>
-            </div>
-          </article>
-        ))}
+      {/* Popular carousel */}
+      {popular.length > 0 && (
+        <section className="section section-alt">
+          <div className="section-header">
+            <h2 className="section-title">Popular picks</h2>
+            <Link href="/books" className="section-link">View all →</Link>
+          </div>
+          <div className="carousel">
+            {popular.map(book => (
+              <BookCard key={book.id} book={book} />
+            ))}
+          </div>
+        </section>
+      )}
+    </main>
+  )
+}
+
+function BookCard({ book }) {
+  return (
+    <Link href={`/books/${book.slug}`} className="book-card">
+      <div className="book-card-img">
+        {book.featuredImage?.node?.sourceUrl ? (
+          <Image
+            src={book.featuredImage.node.sourceUrl}
+            alt={book.title}
+            fill
+            style={{ objectFit: 'cover' }}
+          />
+        ) : (
+          <span className="book-placeholder">📖</span>
+        )}
       </div>
-    </div>
-  );
+      <div className="book-card-body">
+        <div className="book-card-title">{book.title}</div>
+        <div className="book-card-author">{book.authorName}</div>
+        <div className="book-card-footer">
+          <span className="book-card-price">{book.price} kr</span>
+          <span className="book-card-genre">{book.genre}</span>
+        </div>
+      </div>
+    </Link>
+  )
 }
