@@ -17,3 +17,39 @@ export async function getBooks() {
     imageUrl: book._embedded?.['wp:featuredmedia']?.[0]?.source_url || null
   }));
 }
+
+export async function loginToWordPress(username, password) {
+  const auth = btoa(`${username}:${password}`);
+
+  const res = await fetch('http://localhost:8080/wp-json/wp/v2/users/me', {
+    method: 'GET',
+    headers: {
+      'Authorization': `Basic ${auth}`,
+      'Content-Type': 'application/json',
+    }
+  });
+
+  if (!res.ok) {
+    throw new Error('Invalid Username or Application Password');
+  }
+
+  return await res.json(); // Returns user info if successful
+}
+
+export async function createBook(bookData) {
+  return await authenticatedRequest(
+    'http://localhost:8080/wp-json/wp/v2/book', 
+    'POST', 
+    { 
+      title: bookData.title,
+      status: 'publish', // or 'draft'
+      // WordPress custom fields are sent inside the 'meta' object
+      meta: {
+        book_price: bookData.price,
+        book_author: bookData.author,
+        book_genre: bookData.genre,
+        book_description: bookData.description
+      }
+    }
+  );
+}

@@ -43,3 +43,11 @@ add_action('rest_api_init', function () {
         ]);
     }
 });
+
+// Add this to your bookstore-logic.php
+add_action('init', function() {
+    register_meta('post', 'book_price', ['show_in_rest' => true, 'single' => true, 'type' => 'string']);
+    register_meta('post', 'book_author', ['show_in_rest' => true, 'single' => true, 'type' => 'string']);
+    register_meta('post', 'book_genre', ['show_in_rest' => true, 'single' => true, 'type' => 'string']);
+    register_meta('post', 'book_description', ['show_in_rest' => true, 'single' => true, 'type' => 'string']);
+});
