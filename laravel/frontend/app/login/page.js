@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import{ useRouter } from "next/navigation";
-import { loginUser } from "@/lib/auth";
+import { login } from "@/lib/auth.js";
 export default function LoginPage() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -13,16 +13,18 @@ export default function LoginPage() {
         e.preventDefault();
 
         try {
-            const data = await loginUser(email, password);
+            const data = await login(email, password);
 
             console.log("login virker", data, data.token);
             MessageEvent("Du er logget ind", data);
 
             // gemmer  token
             localStorage.setItem("token", data.token);
+            console.log("Token gemt i localStorage:", data.token);
 router.push("/books");
  } catch (err) {
             setError("Forkert login");
+
         }
     };
 
