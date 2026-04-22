@@ -1,19 +1,95 @@
 // lib/api.js
 export async function getBooks() {
-  // 1. The ?_embed tells WordPress to send the image data along with the post
-  const res = await fetch('http://localhost:8080/wp-json/wp/v2/book?_embed');
-  const data = await res.json();
+  const body = JSON.stringify({
+    query: `
+      query GetBooks {
+        books {
+          nodes {
+            id
+            title
+            slug
+            price
+            authorName
+            publishingDate
+            excerpt
+            description
+            genre
+            featuredImage {
+              node {
+                sourceUrl
+              }
+            }
+          }
+        }
+      }
+    `,
+  });
 
-  // 2. Map the complex REST response into a clean, flat object
-  return data.map(book => ({
-    id: book.id,
-    title: book.title.rendered,
-    price: book.price,
-    authorName: book.authorName,
-    description: book.description,
-    genre: book.genre,
-    publishingDate: book.publishingDate,
-    // This looks for the image inside the _embedded object
-    imageUrl: book._embedded?.['wp:featuredmedia']?.[0]?.source_url || null
-  }));
+  console.log("API_URL:", API_URL);
+  console.log("Sending body:", body);
+
+  const res = await fetch(API_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: body,
+  });
+
+  const text = await res.text();
+  console.log("Response status:", res.status);
+  console.log("Response body:", text.slice(0, 500));
+
+  const json = JSON.parse(text);
+
+  if (json.errors) {
+    console.error(json.errors);
+    throw new Error("Failed to fetch books");
+  }
+
+  return json.data.books.nodes;
+}
+
+export async function getBookBySlug(slug) {
+  const body = JSON.stringify({
+    query: `
+      query GetBook($slug: String!) {
+        bookBy(slug: $slug) {
+          id
+          title
+          slug
+          price
+          authorName
+          publishingDate
+          excerpt
+          description
+          genre
+          featuredImage {
+            node {
+              sourceUrl
+            }
+          }
+        }
+      }
+    `,
+    variables: { slug },
+  });
+
+  console.log("getBookBySlug body:", body);
+
+  const res = await fetch(API_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: body,
+  });
+
+  const text = await res.text();
+  console.log("getBookBySlug response:", text.slice(0, 500));
+
+  const json = JSON.parse(text);
+
+  if (json.errors) {
+    console.error(json.errors);
+    throw new Error("Failed to fetch book");
+  }
+
+  return json.data.bookBy;
 }
