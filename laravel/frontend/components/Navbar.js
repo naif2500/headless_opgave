@@ -17,6 +17,10 @@ export default function Navbar() {
          Kurv
         {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
       </Link>
+       <Link href="/login" className="cart-btn">
+         Login
+        <span className="cart-badge"></span>
+      </Link>
     </nav>
   )
 }
