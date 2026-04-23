@@ -4,7 +4,8 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import CreateBookForm from "../../components/CreateBookForm";
-import { getBooks } from "../../lib/api"; // Corrected import usage
+import { getBooks } from "../../lib/api"; 
+import { deleteBookAction } from '../../lib/actions';
 
 export default function ProfilePage() {
   const [books, setBooks] = useState([]);
@@ -20,7 +21,7 @@ export default function ProfilePage() {
         if (!userRes.ok) throw new Error("Not logged in");
         const userData = await userRes.json();
 
-        // 2. Get all books (Corrected function name here)
+        // 2. Get all books
         const allBooks = await getBooks();
 
         // 3. Filter using the real username
@@ -37,9 +38,24 @@ export default function ProfilePage() {
     loadData();
   }, []);
 
+  // Handler for deleting a book
+  const handleDelete = async (e, bookId) => {
+    e.preventDefault(); // Prevents the Link from triggering
+    if (!confirm("Er du sikker på, at du vil slette denne bog?")) return;
+
+    try {
+      await deleteBookAction(bookId);
+      setBooks(books.filter((b) => b.id !== bookId)); // Update state
+      alert("Bogen er slettet!");
+    } catch (err) {
+      alert("Fejl ved sletning: " + err.message);
+    }
+  };
+
   return (
     <div className="page">
       <h1 className="page-title">Min Profil</h1>
+      
       <div className="form-wrapper">
         <CreateBookForm />
       </div>
@@ -52,32 +68,38 @@ export default function ProfilePage() {
           <div className="books-grid">
             {books.length > 0 ? (
               books.map((book) => (
-                <Link
-                  key={book.id}
-                  href={`/books/${book.slug}`}
-                  className="book-card"
-                >
-                  <div className="book-card-img">
-                    {book.featuredImage?.node?.sourceUrl ? (
-                      <Image
-                        src={book.featuredImage.node.sourceUrl}
-                        alt={book.title}
-                        fill
-                        style={{ objectFit: "cover" }}
-                      />
-                    ) : (
-                      <span className="book-placeholder">📖</span>
-                    )}
-                  </div>
-                  <div className="book-card-body">
-                    <div className="book-card-title">{book.title}</div>
-                    <div className="book-card-author">{book.authorName}</div>
-                    <div className="book-card-footer">
-                      <span className="book-card-price">{book.price} kr</span>
-                      <span className="book-card-genre">{book.genre}</span>
+                // Container for both Link and Button
+                <div key={book.id} className="book-card-container">
+                  
+                  <Link href={`/books/${book.slug}`} className="book-card">
+                    <div className="book-card-img">
+                      {book.featuredImage?.node?.sourceUrl ? (
+                        <Image
+                          src={book.featuredImage.node.sourceUrl}
+                          alt={book.title}
+                          fill
+                          style={{ objectFit: "cover" }}
+                        />
+                      ) : (
+                        <span className="book-placeholder">📖</span>
+                      )}
                     </div>
-                  </div>
-                </Link>
+                    <div className="book-card-body">
+                      <div className="book-card-title">{book.title}</div>
+                      <div className="book-card-author">{book.authorName}</div>
+                      <div className="book-card-footer">
+                        <span className="book-card-price">{book.price} kr</span>
+                        <span className="book-card-genre">{book.genre}</span>
+                      </div>
+                    </div>
+                  </Link>
+                  <button 
+                    className="book-card-delete" 
+                    onClick={(e) => handleDelete(e, book.id)}
+                  >
+                    Slet
+                  </button>
+                </div>
               ))
             ) : (
               <p>Du har ikke oprettet nogen bøger endnu.</p>

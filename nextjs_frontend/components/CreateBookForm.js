@@ -9,15 +9,12 @@ export default function CreateBookForm() {
     try {
       await createBookAction(formData);
       alert('Book added successfully!');
-      // Reset is a bit tricky with action={...}, 
-      // you can use a ref or just let the page reload/revalidate
     } catch (err) {
       alert('Error: ' + err.message);
     }
   };
 
   return (
-    // We use the 'action' prop instead of 'onSubmit'
     <form action={formAction} className="space-y-4">
       <input name="title" placeholder="Book Title" required className="border p-2 w-full" />
       <input name="price" placeholder="Price" type="number" required className="border p-2 w-full" />
