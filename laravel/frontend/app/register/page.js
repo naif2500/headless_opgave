@@ -15,12 +15,24 @@ export default function RegisterPage() {
         e.preventDefault();
 
         try {
+            // 1. Hent CSRF cookie (KRÆVES for Sanctum)
+            await fetch(
+                `${process.env.NEXT_PUBLIC_BASE_URL}/sanctum/csrf-cookie`,
+                {
+                    method: "GET",
+                    credentials: "include",
+                }
+            );
+
+            // 2. Opret bruger
             const res = await fetch(
                 `${process.env.NEXT_PUBLIC_BASE_URL}/api/users`,
                 {
                     method: "POST",
+                    credentials: "include",
                     headers: {
                         "Content-Type": "application/json",
+                        "Accept": "application/json",
                     },
                     body: JSON.stringify({
                         name,
@@ -30,7 +42,14 @@ export default function RegisterPage() {
                 }
             );
 
-            const data = await res.json();
+            const text = await res.text();
+
+            let data;
+            try {
+                data = JSON.parse(text);
+            } catch {
+                throw new Error("Server returned HTML (check Laravel)");
+            }
 
             if (!res.ok) {
                 throw new Error(data.message || "Register failed");
@@ -38,8 +57,8 @@ export default function RegisterPage() {
 
             console.log("User created:", data);
 
-            // send direkte til login
             router.push("/login");
+
         } catch (err) {
             setError(err.message);
         }
@@ -53,7 +72,7 @@ export default function RegisterPage() {
                     Opret en ny bruger
                 </h2>
 
-                <form className="login-form" onSubmit={handleSubmit}>
+                <form method="post" className="login-form" onSubmit={handleSubmit}>
                     <label>Navn:</label>
                     <input
                         type="text"
