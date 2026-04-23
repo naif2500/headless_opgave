@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Api\UserController;
-
+use App\Models\Book;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
@@ -13,7 +13,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 // Route::post('/login',[AuthController::class, 'login',]);
 // Route::post('/logout', [AuthController::class, 'logout'])
 // ->middleware('auth:sanctum');
-Route::post('/login',[AuthController::class, 'login',]);
+Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])
 ->middleware('auth:sanctum');
 
@@ -26,6 +26,8 @@ Route::apiResource('books', BookController::class)->only(['store', 'destroy'])->
 //Det skal kun være tilladt at oprette og slette bøger hvis man er logget ind
 Route::apiResource('users', UserController::class);
 Route::post('/users', [UserController::class, 'store']);
+
+
 
 //steens kode: (kan bruges til at lave en route til at se alle events og en route til at se alle attendees for et event
 // skal så være byttet ud med books og authors  ikke events og attendees)

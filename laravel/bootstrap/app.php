@@ -12,8 +12,11 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+$middleware->statefulApi();
     })
+    //statefulApi()
+// = tænder Sanctum cookie authentication
+// = gør Next.js + Laravel login muligt
     ->withExceptions(function (Exceptions $exceptions): void {
         //
     })->create();

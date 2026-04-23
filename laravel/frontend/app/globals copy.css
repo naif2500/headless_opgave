@@ -316,17 +316,6 @@ body { font-family: 'DM Sans', sans-serif; background: #f9f7f4; color: #1a1a1a; 
 .review-item-qty { font-size: 0.78rem; color: #888; }
 .review-item-price { font-weight: 500; margin-left: auto; }
 
-
-/* LOGIN */
-.login-page-layout { display: flex; justify-content: space-between; align-items: center; height: 80vh; background-color: red; }
-.login-container{ display: flex; flex-direction: column; background-color: blue; }
-.login-form {
-  background: #fff;
-  padding: 2rem;
-  border-radius: 8px;
-  box-shadow: 0 12px 32px rgba(0,0,0,0.1);
-  width: 320px;
-}
 /* SUCCESS */
 .success-page { text-align: center; padding: 5rem 2rem; }
 .success-icon { font-size: 4rem; margin-bottom: 1.5rem; }
