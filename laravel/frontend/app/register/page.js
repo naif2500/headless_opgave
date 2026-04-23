@@ -3,11 +3,11 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-function getCookie(name) {
+function getCookie(name) { //document.cookie giver mig alle cookies i en string
     return document.cookie
-        .split("; ")
-        .find((row) => row.startsWith(name + "="))
-        ?.split("=")[1];
+     .split("; ") //deler op i stringen ved "; " så jeg får en array med hver cookie som et element
+        .find((row) => row.startsWith(name + "=")) //finder den cookie jeg æger efter
+        ?.split("=")[1]; //deler den cookie op ved "=" og tager det sidste element som er værdien af cookien
 }
 
 export default function RegisterPage() {
@@ -23,7 +23,7 @@ export default function RegisterPage() {
         setError(null);
 
         try {
-            // 1. CSRF cookie (Sanctum kræver dette)
+            // 1. CSRF cookie (Sanctum kræver dette) CSRF ER CROSS-SITE REUEST
             await fetch(
                 `${process.env.NEXT_PUBLIC_BASE_URL}/sanctum/csrf-cookie`,
                 {

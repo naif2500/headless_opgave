@@ -22,7 +22,7 @@ router.push("/books");
         }
     };
     return (
-       < div className="login-page-layout">
+       < div className="login-page-layout hero">
         <div className="login-container">
             <h1 className="hero-title">Login</h1>
             <h2 className="hero-subtitle">Indtast dine oplysninger for at logge ind</h2>
@@ -43,6 +43,7 @@ router.push("/books");
                     required
                 />
                 <button className="hero-cta" type="submit">Login</button>
+                <button className="hero-cta" onClick={() => router.push("/register")} type="button">Opret bruger</button>
             </form>
         </div>
         </div>
