@@ -7,6 +7,9 @@ services:
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      WORDPRESS_CONFIG_EXTRA: |
+        define('JWT_AUTH_SECRET_KEY', '${JWT_SECRET}');
+        define('JWT_AUTH_CORS_ENABLE', true);
     volumes:
       - db_data:/var/lib/mysql
       - ./database:/docker-entrypoint-initdb.d
@@ -26,6 +29,7 @@ services:
       - wp_content:/var/www/html/wp-content
       - ./plugins:/var/www/html/wp-content/plugins
       - ./themes:/var/www/html/wp-content/themes
+      - ./apache-config.conf:/etc/apache2/conf-enabled/custom-auth.conf:ro
     depends_on:
       - db
 
@@ -43,3 +47,5 @@ services:
 volumes:
   db_data:
   wp_content:
+
+      
