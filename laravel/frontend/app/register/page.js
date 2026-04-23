@@ -3,6 +3,13 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
+function getCookie(name) {
+    return document.cookie
+        .split("; ")
+        .find((row) => row.startsWith(name + "="))
+        ?.split("=")[1];
+}
+
 export default function RegisterPage() {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
@@ -13,9 +20,10 @@ export default function RegisterPage() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setError(null);
 
         try {
-            // 1. Hent CSRF cookie (KRÆVES for Sanctum)
+            // 1. CSRF cookie (Sanctum kræver dette)
             await fetch(
                 `${process.env.NEXT_PUBLIC_BASE_URL}/sanctum/csrf-cookie`,
                 {
@@ -24,39 +32,37 @@ export default function RegisterPage() {
                 }
             );
 
-            // 2. Opret bruger
+            const xsrfToken = decodeURIComponent(getCookie("XSRF-TOKEN"));
+
+            // 2. Register request
             const res = await fetch(
-                `${process.env.NEXT_PUBLIC_BASE_URL}/api/users`,
+                `${process.env.NEXT_PUBLIC_BASE_URL}/api/register`,
                 {
                     method: "POST",
                     credentials: "include",
                     headers: {
                         "Content-Type": "application/json",
                         "Accept": "application/json",
+                        "X-XSRF-TOKEN": xsrfToken,
                     },
                     body: JSON.stringify({
                         name,
                         email,
                         password,
+                        password_confirmation: password,
                     }),
                 }
             );
 
-            const text = await res.text();
-
-            let data;
-            try {
-                data = JSON.parse(text);
-            } catch {
-                throw new Error("Server returned HTML (check Laravel)");
-            }
+            const data = await res.json().catch(() => null);
 
             if (!res.ok) {
-                throw new Error(data.message || "Register failed");
+                throw new Error(data?.message || "Register failed");
             }
 
             console.log("User created:", data);
 
+            // 3. Redirect efter succes
             router.push("/login");
 
         } catch (err) {
@@ -72,7 +78,7 @@ export default function RegisterPage() {
                     Opret en ny bruger
                 </h2>
 
-                <form method="post" className="login-form" onSubmit={handleSubmit}>
+                <form className="login-form" onSubmit={handleSubmit}>
                     <label>Navn:</label>
                     <input
                         type="text"
