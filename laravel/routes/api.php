@@ -24,9 +24,9 @@ Route::apiResource('books', BookController::class)->only(['index', 'show']);
 // beskyttede ruter (dem hvorpå auth. behøves/kræves)
 Route::apiResource('books', BookController::class)->only(['store', 'destroy'])->middleware('auth:sanctum');
 //Det skal kun være tilladt at oprette og slette bøger hvis man er logget ind
-Route::apiResource('users', UserController::class);
-Route::post('/users', [UserController::class, 'store']);
-
+// Route::apiResource('users', UserController::class);
+// Route::post('/users', [UserController::class, 'store']);
+Route::apiResource('users', UserController::class)->only(['store']);
 
 
 //steens kode: (kan bruges til at lave en route til at se alle events og en route til at se alle attendees for et event
