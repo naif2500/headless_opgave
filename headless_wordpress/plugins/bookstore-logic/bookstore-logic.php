@@ -1,45 +1,60 @@
 <?php
 /*
 Plugin Name: Bookstore Logic
-Description: Registers Books CPT and REST API fields for Headless React
+Description: Handles Headless CPT, Meta, and Registration.
 Version: 1.0
-Author: Team Bookstore
 */
 
-// 1. Create the "Book" Custom Post Type
+// 1. CORS Support
+add_action('rest_api_init', function() {
+    add_filter('rest_pre_serve_request', function( $value ) {
+        header( 'Access-Control-Allow-Origin: http://localhost:3000' );
+        header( 'Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE' );
+        header( 'Access-Control-Allow-Headers: Authorization, Content-Type, X-WP-Nonce' );
+        header( 'Access-Control-Allow-Credentials: true' );
+        return $value;
+    });
+});
+
+// 2. Register "Book" Post Type
 add_action('init', function() {
     register_post_type('book', [
+        'public' => true,
+        'show_in_rest' => true,
+        'supports' => ['title', 'editor', 'thumbnail'],
+        'capability_type' => 'post',
+        'map_meta_cap' => true,
         'labels' => [
             'name' => 'Books',
-            'singular_name' => 'Book'
+            'singular_name' => 'Book',
+            'add_new' => 'Add New Book',
+            'add_new_item' => 'Add New Book',
+            'edit_item' => 'Edit Book',
+            'all_items' => 'All Books',
         ],
-        'public'       => true,
-        'has_archive'  => true,
-        'show_in_rest' => true, 
-        'menu_icon'    => 'dashicons-book-alt',
-        'supports'     => ['title', 'editor', 'thumbnail', 'excerpt', 'custom-fields']
+        'menu_icon' => 'dashicons-book',
     ]);
 });
 
-// 2. Register Custom Fields to the REST API
-add_action('rest_api_init', function () {
-    
-    // Helper function to define the fields to keep code clean
-    $fields = [
-        'price'          => 'book_price',
-        'authorName'     => 'book_author',
-        'description'    => 'book_description',
-        'genre'          => 'book_genre',
-        'publishingDate' => 'book_publishing_date'
-    ];
-
-    foreach ($fields as $fieldName => $metaKey) {
-        register_rest_field('book', $fieldName, [
-            'get_callback' => function($post_arr) use ($metaKey) {
-                return get_post_meta($post_arr['id'], $metaKey, true);
-            },
-            'update_callback' => null,
-            'schema' => null,
+// 3. Register Meta (Expose to REST)
+add_action('init', function() {
+    $meta_keys = ['book_price', 'book_author', 'book_genre', 'book_description'];
+    foreach ($meta_keys as $key) {
+        register_meta('post', $key, [
+            'object_subtype' => 'book',
+            'show_in_rest' => true, 
+            'single' => true, 
+            'type' => 'string'
         ]);
     }
 });
+
+// 4. Custom Hook to save Meta via REST
+add_action('rest_insert_book', function($post, $request, $creating) {
+    $meta_data = $request->get_param('meta');
+    if (!empty($meta_data) && is_array($meta_data)) {
+        foreach ($meta_data as $key => $value) {
+            update_post_meta($post->ID, $key, sanitize_text_field($value));
+        }
+    }
+}, 10, 3);

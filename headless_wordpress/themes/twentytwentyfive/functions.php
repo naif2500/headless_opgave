@@ -164,3 +164,7 @@ if ( ! function_exists( 'twentytwentyfive_format_binding' ) ) :
 		}
 	}
 endif;
+
+// Force Application Passwords to be enabled regardless of HTTPS
+add_filter( 'wp_is_application_passwords_available', '__return_true' );
+add_filter( 'wp_is_application_passwords_available_for_site', '__return_true' );
