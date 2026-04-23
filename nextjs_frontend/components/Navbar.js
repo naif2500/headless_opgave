@@ -13,6 +13,7 @@ export default function Navbar() {
         <Link href="/books" className="navbar-link">Gennemse Bøger</Link>
         <Link href="/" className="navbar-link">Nye Ankomster</Link>
       </div>
+      <Link href="/profile" className="navbar-link">Log Ind</Link>
       <Link href="/cart" className="cart-btn">
          Kurv
         {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}

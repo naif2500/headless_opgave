@@ -58,3 +58,19 @@ add_action('rest_insert_book', function($post, $request, $creating) {
         }
     }
 }, 10, 3);
+
+// 5. Force Meta into the REST API Response
+add_action('rest_api_init', function () {
+    $meta_keys = ['book_price', 'book_author', 'book_genre', 'book_description'];
+    
+    foreach ($meta_keys as $key) {
+        register_rest_field('book', $key, [
+            'get_callback' => function ($post_arr, $field_name) {
+                return get_post_meta($post_arr['id'], $field_name, true);
+            },
+            'schema' => [
+                'type' => 'string',
+            ],
+        ]);
+    }
+});

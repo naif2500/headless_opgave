@@ -3,4 +3,16 @@ const nextConfig = {
   /* config options here */
 };
 
-export default nextConfig;
+export default {
+  images: {
+    unoptimized: true,
+    remotePatterns: [
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+        port: '8080',
+        pathname: '/wp-content/uploads/**',
+      },
+    ],
+  },
+};
