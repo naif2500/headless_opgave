@@ -64,8 +64,9 @@ export default function BooksPage() {
                 <div className="book-card-author">{book.authorName}</div>
                 <div className="book-card-footer">
                   <span className="book-card-price">{book.price} kr</span>
-                  <span className="book-card-genre">{book.genre}</span>
+                  <span className="book-card-genre">{book.genre}</span>                 
                 </div>
+                <span className="book-card-posted-by">Sælges af: {book.postedBy}</span>
               </div>
             </Link>
           ))}

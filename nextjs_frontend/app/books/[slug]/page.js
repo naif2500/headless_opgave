@@ -2,10 +2,10 @@
 'use client'
 
 import { useEffect, useState, use } from 'react'
-import { getBookBySlug } from '@/lib/api'
+import { getBookBySlug } from '../../../lib/api'
 import Link from 'next/link'
 import Image from 'next/image'
-import { useCart } from '@/context/CartContext'
+import { useCart } from '../../../context/CartContext'
 
 function conditionColor(val) {
   if (val >= 70) return '#3B6D11'
@@ -114,6 +114,9 @@ export default function BookPage({ params }) {
           <p className="product-author">af {book.authorName}</p>
           {book.publishingDate && (
             <p className="product-pubdate">Udgivet: {book.publishingDate}</p>
+          )}
+          {book.postedBy && (
+            <p className="product-posted-by">Sælges af: {book.postedBy}</p>
           )}
           <p className="product-desc">
             {book.description || (book.excerpt && book.excerpt.replace(/<[^>]*>/g, ''))}

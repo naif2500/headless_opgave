@@ -15,6 +15,7 @@ export async function getBooks() {
     description: book.book_description || "",
     genre: book.book_genre || "None",
     publishingDate: book.date,
+    postedBy: book.book_posted_by || "Unknown",
     featuredImage: {
       node: {
         sourceUrl:
@@ -53,6 +54,7 @@ export async function getBookBySlug(slug) {
       description: book?.book_description || book?.meta?.book_description || "",
       genre: book?.book_genre || book?.meta?.book_genre || "None",
       publishingDate: book?.date || "",
+      postedBy: book?.book_posted_by || book?.meta?.book_posted_by || "Unknown",
       featuredImage: {
         node: {
           sourceUrl:
@@ -113,6 +115,7 @@ export async function createBook(bookData, token) {
         book_author: bookData.author,
         book_description: bookData.description,
         book_genre: bookData.genre,
+        book_posted_by: bookData.postedBy
       },
     }),
   });
