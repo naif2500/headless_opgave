@@ -1,5 +1,6 @@
-import { CartProvider } from '@/context/CartContext'
-import Navbar from '@/components/Navbar'
+import { cookies } from 'next/headers';
+import Navbar from '../components/Navbar'
+import { CartProvider } from '../context/CartContext'
 import './globals.css'
 
 export const metadata = {
@@ -7,12 +8,17 @@ export const metadata = {
   description: 'Kuratérte brugte bøger',
 }
 
-export default function RootLayout({ children }) {
+export const dynamic = 'force-dynamic';
+
+export default async function RootLayout({ children }) {
+  const cookieStore = await cookies();
+  const token = cookieStore.get('auth_token');
+  const isLoggedIn = !!token;
   return (
     <html lang="en">
       <body>
         <CartProvider>
-          <Navbar />
+          <Navbar isLoggedIn={isLoggedIn} />
           {children}
         </CartProvider>
       </body>

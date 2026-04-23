@@ -1,20 +1,31 @@
+'use client'
 import { createBook } from '../lib/api';
+import { getCookie } from 'cookies-next'; // Optional: Use 'cookies-next' or just write an action
+
+// We define the action inside the component file, but it runs on the server
+async function handleCreateBook(formData) {
+  'use server'
+  const { cookies } = require('next/headers');
+  const token = cookies().get('auth_token')?.value;
+
+  const bookData = {
+    title: formData.get('title'),
+    price: formData.get('price'),
+    author: formData.get('author'),
+    description: formData.get('description'),
+    genre: 'General'
+  };
+
+  return await createBook(bookData, token);
+}
 
 export default function CreateBookForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    // This object matches EXACTLY what api.js expects
-    const bookData = {
-      title: e.target.title.value,
-      description: e.target.description.value, // Added this
-      price: e.target.price.value,
-      author: e.target.author.value,
-      genre: 'General'
-    };
+    const formData = new FormData(e.target);
 
     try {
-      await createBook(bookData);
+      await handleCreateBook(formData);
       alert('Book added successfully!');
       e.target.reset();
     } catch (err) {

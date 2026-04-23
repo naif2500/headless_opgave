@@ -1,4 +1,4 @@
-import { getBooks } from "@/lib/api";
+import { getBooks } from "../lib/api";
 import Link from "next/link";
 import Image from "next/image";
 

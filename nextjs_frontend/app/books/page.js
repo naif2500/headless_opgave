@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { getBooks } from '@/lib/api'
+import { getBooks } from '../../lib/api'
 import Link from 'next/link'
 import Image from 'next/image'
 

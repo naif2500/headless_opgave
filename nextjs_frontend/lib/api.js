@@ -81,9 +81,9 @@ export async function loginUser(username, password) {
   const params = new URLSearchParams();
   params.append("username", username);
   params.append("password", password);
-  params.append("AUTH_KEY", AUTH_KEY);
+  params.append("AUTH_KEY", "secret_key"); // Make sure this is in your .env!
 
-  const res = await fetch(`${WP_URL}/?rest_route=/simple-jwt-login/v1/auth`, {
+  const res = await fetch("http://localhost:8080/wp-json/?rest_route=/simple-jwt-login/v1/auth", {
     method: "POST",
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
     body: params.toString(),
@@ -92,19 +92,17 @@ export async function loginUser(username, password) {
   const data = await res.json();
   if (!res.ok || !data.success) throw new Error(data.message || "Login failed");
 
-  localStorage.setItem("jwt_token", data.data.jwt);
-  return data;
+  return data.data.jwt; // Return the token to the component
 }
 
-export async function createBook(bookData) {
-  const token = localStorage.getItem("jwt_token");
+export async function createBook(bookData, token) {
   if (!token) throw new Error("You must be logged in.");
 
   const res = await fetch(`${WP_URL}/wp/v2/book`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${token}`, // Pass the token here
     },
     body: JSON.stringify({
       title: bookData.title,
@@ -120,10 +118,6 @@ export async function createBook(bookData) {
   });
 
   const data = await res.json();
-  if (!res.ok) {
-    const errorMessage =
-      data.message || (data.data && data.data.message) || JSON.stringify(data);
-    throw new Error(errorMessage);
-  }
+  if (!res.ok) throw new Error(data.message || "Failed to create book");
   return data;
 }
