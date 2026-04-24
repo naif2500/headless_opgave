@@ -55,7 +55,6 @@ export default function BookPage({ params }) {
 
     useEffect(() => {
         getBookBySlug(slug).then((data) => {
-            console.log("data", data);
             setBook(data.data);
             setLoading(false);
         });

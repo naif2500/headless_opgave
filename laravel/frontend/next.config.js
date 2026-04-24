@@ -1,11 +1,18 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    /* config options here */
+    env: {
+        NEXT_PUBLIC_BASE_URL: "http://localhost:8000",
+    },
     images: {
+        unoptimized: true,
         remotePatterns: [
             {
                 protocol: "https",
-                hostname: "**",
+                hostname: "images.unsplash.com",
+            },
+            {
+                protocol: "https",
+                hostname: "plus.unsplash.com",
             },
             {
                 protocol: "http",
@@ -17,4 +24,4 @@ const nextConfig = {
     },
 };
 
-export default nextConfig;
+module.exports = nextConfig;
