@@ -71,41 +71,49 @@ export default function RegisterPage() {
     };
 
     return (
-        <div className="login-page-layout">
+        <div className="login-page-layout hero">
             <div className="login-container">
-                <h1 className="hero-title">Register</h1>
-                <h2 className="hero-subtitle">
+                <h1 className="page-title white">Register</h1>
+                <h2 className="page-sub white">
                     Opret en ny bruger
                 </h2>
 
-                <form className="login-form" onSubmit={handleSubmit}>
-                    <label>Navn:</label>
+                <form className="form-field" onSubmit={handleSubmit}>
+                    <label className="form-label blue">Navn:</label>
                     <input
                         type="text"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         required
+                        className="form-input"
                     />
 
-                    <label>Email:</label>
+                    <label className="form-label blue">Email:</label>
                     <input
                         type="email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         required
+                        className="form-input"
                     />
 
-                    <label>Password:</label>
+                    <label className="form-label blue">Password:</label>
                     <input
                         type="password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         required
+                        className="form-input"
                     />
-
+                    <div className="login-buttons">
                     <button className="hero-cta" type="submit">
-                        Opret bruger
+                        Register
                     </button>
+                    <button className="hero-cta " onClick={() => router.push("/login")} type="button">
+                        Tilbage til login
+                    </button>
+                    </div>
+
 
                     {error && (
                         <p style={{ color: "red" }}>{error}</p>
