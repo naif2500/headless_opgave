@@ -2,7 +2,7 @@
 import { useState } from "react";
 import{ useRouter } from "next/navigation";
 import { login } from "@/lib/auth.js";
-import Image from "next/image"
+import Image from "next/image";
 export default function LoginPage() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -23,13 +23,13 @@ router.push("/books");
         }
     };
     return (
-       < div className="login-page-layout ">
+       < div className="login-page-layout hero  ">
 
         <div className="login-container">
-            <h1 className="">Login</h1>
-            <h2 className="hero-subtitle">Indtast dine oplysninger for at logge ind</h2>
+            <h1 className="page-title white ">Login</h1>
+            {/* <h2 className="page-sub white ">Indtast dine oplysninger for at logge ind</h2> */}
             <form method="post" className="form-field" onSubmit={handleSubmit}>
-                <label  className="form-label">Email:</label>
+                <label  className="form-label blue">Email:</label>
                 <input className="form-input"
                     type="email"
                     value={email}
@@ -37,7 +37,7 @@ router.push("/books");
                     required
 
                 />
-                <label className="form-label">Password:</label>
+                <label className="form-label blue">Password:</label>
                 <input
                     type="password"
                     value={password}
@@ -52,13 +52,15 @@ router.push("/books");
 
             </form>
         </div>
-         <div className="background-image">
- <Image
-      src="/bg-sign-up.png"
-      width={500}
-      height={500}
-      alt="Picture of the author"
-    />
+         <div className="background-image-div">
+
+<Image
+  src="/img/bg-sign-up.png"
+  alt="Signup background"
+  className="image-login"
+  width={300}
+  height={300}
+/>
      </div>
         </div>
     );
