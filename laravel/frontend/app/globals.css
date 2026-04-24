@@ -773,3 +773,22 @@ body {
     text-align: center;
     text-decoration: none;
 }
+
+.buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.delete-btn {
+    background-color: #e24b4a;
+    color: white;
+    border: none;
+    padding: 0.85rem;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: "DM Sans", sans-serif;
+    margin-top: 1.25rem;
+}

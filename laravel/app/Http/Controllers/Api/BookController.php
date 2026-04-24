@@ -63,16 +63,46 @@ class BookController extends Controller
     }
 
     public function show(Book $book) {
-         $book->load(['author', 'genre']);
+
+        $book->load(['author', 'genre']);
 
         return new BookResource($book);
     }
 
-    public function destroy(Book $book) {
-    $book->delete();
-return response()->json([
-'Message' => 'Book deleted successfully']);
+    public function update(Book $book, Request $request) {
+            $validated = $request->validate([
+               'description' => 'required|string',
+               'price' => 'required|numeric',
+               'image' => 'nullable|image|mimes:jpeg,png,jpg',
+            ]);
 
+        $book = Book::findOrFail($book->id);
+
+        $updateData = [
+            'description' => $validated['description'],
+            'price' => $validated['price'],
+        ];
+
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('images', 'public');
+            $updateData['image'] = 'http://localhost:8000/storage/' . $path;
+        }
+
+        $book->update($updateData);
+
+        return response()->json([
+        'message' => 'Book updated successfully']);
+    }
+
+    public function destroy(Book $book) {
+        $book->delete();
+        return response()->json([
+        'message' => 'Book deleted successfully']);
+    }
+
+    public function getUserBooks(Request $request) {
+        $books = Book::with(["author", "genre"])->where("user_id", $request->user()->id)->get();
+        return BookResource::collection($books);
     }
 }
 //https://www.udemy.com/course/laravel-beginner-fundamentals/learn/lecture/37619738#questions 7:09

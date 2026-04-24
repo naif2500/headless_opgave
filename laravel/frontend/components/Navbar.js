@@ -19,7 +19,10 @@ export default function Navbar() {
                     Nye Ankomster
                 </Link>
                 <Link href="/sell-book" className="navbar-link">
-                    Sælg en bog
+                    Sælg en Bog
+                </Link>
+                <Link href="/user-books" className="navbar-link">
+                    Dine Bøger
                 </Link>
             </div>
             <Link href="/cart" className="cart-btn">
