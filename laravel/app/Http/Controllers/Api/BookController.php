@@ -52,6 +52,8 @@ class BookController extends Controller
         'user_id' => $request->user()->id
     ]);
 
+    $book->author()->attach($author->id);
+
     return new BookResource($book->load(['author', 'genre', "user"]));
 }
 
