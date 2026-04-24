@@ -27,6 +27,7 @@ Route::apiResource('books', BookController::class)->only(['store', 'update', 'de
 Route::apiResource('users', UserController::class);
 // Route::post('/users', [UserController::class, 'store']);
 
+Route::get('user-books', [BookController::class, "getUserBooks"])->middleware("auth:sanctum");
 
 Route::post('/register', [UserController::class, 'store']);
 

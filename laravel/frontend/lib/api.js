@@ -64,6 +64,7 @@ export async function getUserBooks() {
         method: "GET",
         credentials: "include",
         headers: {
+            Accept: "application/json",
             "X-XSRF-TOKEN": xsrfToken,
         },
     });
