@@ -21,7 +21,7 @@ class BookController extends Controller
     $validated = $request->validate([
         'title' => 'required|string',
         'description' => 'required|string',
-        'publishing_date' => 'required|date',
+        'publishing_date' => 'date',
         'price' => 'required|numeric',
         'genre' => 'required|string',
         'image' => 'nullable|image|mimes:jpeg,png,jpg',
