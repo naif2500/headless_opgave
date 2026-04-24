@@ -1,4 +1,4 @@
-function getCookie(name) {
+export function getCookie(name) {
     return document.cookie
         .split("; ")
         .find((row) => row.startsWith(name + "="))
@@ -13,7 +13,7 @@ export async function login(email, password) {
 
     const xsrfToken = decodeURIComponent(getCookie("XSRF-TOKEN"));
 
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/login`, {
+    const res = await fetch(`/api/login`, {
         credentials: "include",
         method: "POST",
 

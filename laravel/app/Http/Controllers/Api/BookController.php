@@ -6,40 +6,54 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\BookResource;
 use App\Http\Resources\Traits\CanLoadRelationships;
+use App\Models\Author;
 use App\Models\Book;
+use App\Models\Genre;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class BookController extends Controller
 {
-// public function __construct()
-//     {
-//         $this->middleware('auth:sanctum')->except(['index', 'show']);
-//     } //min index + show er public + at man ike beøver token (login) for at kunne se dem
 
-//     public function store(Request $request)
-// {
-//     $validated = $request->validate([
-//         'title' => 'required|string',
-//         'description' => 'required|string',
-//         'publishing_date' => 'required|date',
-//         'price' => 'required|numeric',
-//         'genre_id' => 'required|exists:genres,id',
-//         'image' => 'nullable|url',
-//         'author_ids' => 'required|array',
-//         'author_ids.*' => 'exists:authors,id'
-//     ]);
+    public function store(Request $request)
+{
 
-//     $book = Book::create([
-//         ...$validated,
-//         'user_id' => $request->user()->id
-//     ]);
+    $validated = $request->validate([
+        'title' => 'required|string',
+        'description' => 'required|string',
+        'publishing_date' => 'required|date',
+        'price' => 'required|numeric',
+        'genre' => 'required|string',
+        'image' => 'nullable|image|mimes:jpeg,png,jpg',
+        'author' => 'required|string',
+    ]);
 
-//     if ($request->has('author_ids')) {
-//         $book->authors()->attach($request->author_ids);
-//     }
+    $path = $request->file('image')->store('images', 'public');
 
-//     return new BookResource($book->load(['authors', 'genre']));
-// }
+    $genre = Genre::where("name", $validated["genre"])->first();
+
+    if (!$genre) {
+        $genre = Genre::create(["name" => $validated["genre"]]);
+    }
+
+    $author = Author::where("name", $validated["author"])->first();
+
+    if (!$author) {
+        $author = Author::create(["name" => $validated["author"]]);
+    }
+
+    $book = Book::create([
+        'title' => $validated["title"],
+        'description' => $validated["description"],
+        'publishing_date' => $validated["publishing_date"],
+        'price' => $validated["price"],
+        'genre_id' => $genre->id,
+        'image' => 'http://localhost:8000/storage/' . $path,
+        'user_id' => $request->user()->id
+    ]);
+
+    return new BookResource($book->load(['author', 'genre', "user"]));
+}
 
     public function index() {
         $books = Book::with(["author", "genre"])->get();

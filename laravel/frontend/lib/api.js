@@ -1,5 +1,7 @@
 // lib/api.js
 
+import { getCookie } from "./auth";
+
 export async function getBooks() {
     const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/books/`, {
         method: "GET",
@@ -29,4 +31,24 @@ export async function getBookBySlug(slug) {
     const json = await res.json();
 
     return json;
+}
+
+export async function submitBook(formData) {
+    await fetch(`/sanctum/csrf-cookie`, {
+        credentials: "include",
+        method: "GET",
+    });
+
+    const xsrfToken = decodeURIComponent(getCookie("XSRF-TOKEN"));
+
+    const res = await fetch(`/api/books/`, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+            "X-XSRF-TOKEN": xsrfToken,
+        },
+        body: formData,
+    });
+
+    return res.json();
 }

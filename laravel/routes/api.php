@@ -27,7 +27,17 @@ Route::apiResource('books', BookController::class)->only(['store', 'destroy'])->
 Route::apiResource('users', UserController::class);
 Route::post('/users', [UserController::class, 'store']);
 
-
+Route::get('/debug-auth', function (Request $request) {
+    return response()->json([
+        'authenticated' => auth('sanctum')->check(),
+        'session_id' => session()->getId(),
+        'request_host' => $request->getHost(),
+        'origin' => $request->header('origin'),
+        'referer' => $request->header('referer'),
+        'stateful_domains' => config('sanctum.stateful'),
+        'is_stateful' => \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::fromFrontend($request),
+    ]);
+});
 
 //steens kode: (kan bruges til at lave en route til at se alle events og en route til at se alle attendees for et event
 // skal så være byttet ud med books og authors  ikke events og attendees)
