@@ -15,9 +15,6 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->statefulApi();
         $middleware->api(append: \App\Http\Middleware\CorsMiddleware::class);
     })
-    //statefulApi()
-// = tænder Sanctum cookie authentication
-// = gør Next.js + Laravel login muligt
     ->withExceptions(function (Exceptions $exceptions): void {
         //
     })->create();

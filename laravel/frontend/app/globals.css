@@ -702,24 +702,50 @@ body {
 }
 
 /* LOGIN */
-.login-page-layout {
-    display: flex;
+.login-page-layout { display: flex;
     justify-content: space-between;
-    align-items: center;
-    height: 80vh;
-    background-color: red;
-}
-.login-container {
-    display: flex;
-    flex-direction: column;
-    background-color: blue;
-}
+     align-items: center; height: 80vh;
+     background-color: red; }
+
+.login-container{ display: flex;
+     flex-direction: column;
+     align-items: center;
+      justify-content: center;
+       height: 100%;
+    /* background-color: black; */
+width: 50%;
+ }
+
 .login-form {
-    background: #fff;
-    padding: 2rem;
-    border-radius: 8px;
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
-    width: 320px;
+  background: pink;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 12px 32px rgba(0,0,0,0.1);
+  width: 320px;
+  display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.background-image-div{
+background-color: white;
+width: 50%;
+height: 100%;
+display: flex;
+justify-content: center;
+align-items: center;
+}
+.image-login{
+width: 50%;
+}
+.login-form > input{width: 100px;}
+.login-buttons{ display: flex;
+    gap: 1rem;
+margin-top: 12px;}
+.white{
+    color:white;
+}
+.blue{
+    color: #5a7db5;
 }
 /* SUCCESS */
 .success-page {
