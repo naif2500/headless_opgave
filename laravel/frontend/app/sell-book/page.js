@@ -16,6 +16,10 @@ const Page = () => {
         e.preventDefault();
         const data = new FormData(e.target);
         const res = await submitBook(data);
+
+        if (res.data) {
+            redirect("/books");
+        }
     };
 
     return (
@@ -39,6 +43,7 @@ const Page = () => {
                             id="title"
                             name="title"
                             className="form-input"
+                            required
                         ></input>
                     </div>
                     <div className="labeled-input">
@@ -50,6 +55,7 @@ const Page = () => {
                             id="author"
                             name="author"
                             className="form-input"
+                            required
                         ></input>
                     </div>
                 </div>
@@ -75,6 +81,7 @@ const Page = () => {
                             id="genre"
                             name="genre"
                             className="form-input"
+                            required
                         ></input>
                     </div>
                 </div>
@@ -89,6 +96,7 @@ const Page = () => {
                             id="price"
                             name="price"
                             className="form-input"
+                            required
                         ></input>
                     </div>
                     <div className="labeled-input">
@@ -115,6 +123,7 @@ const Page = () => {
                             name="description"
                             className="form-input"
                             maxLength={255}
+                            required
                         ></textarea>
                     </div>
                 </div>
