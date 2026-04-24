@@ -38,7 +38,7 @@ add_action('init', function() {
 
 // 3. Register Meta (Expose to REST)
 add_action('init', function() {
-    $meta_keys = ['book_price', 'book_author', 'book_genre', 'book_description', 'book_posted_by'];
+    $meta_keys = ['book_price', 'book_author', 'book_genre', 'book_description', 'book_posted_by',];
     foreach ($meta_keys as $key) {
         register_meta('post', $key, [
             'object_subtype' => 'book',
@@ -61,7 +61,7 @@ add_action('rest_insert_book', function($post, $request, $creating) {
 
 // 5. Force Meta into the REST API Response
 add_action('rest_api_init', function () {
-    $meta_keys = ['book_price', 'book_author', 'book_genre', 'book_description', 'book_posted_by'];
+    $meta_keys = ['book_price', 'book_author', 'book_genre', 'book_description', 'book_posted_by',];
     
     foreach ($meta_keys as $key) {
         register_rest_field('book', $key, [

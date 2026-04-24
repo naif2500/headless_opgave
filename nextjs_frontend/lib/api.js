@@ -82,14 +82,58 @@ export async function loginUser(username, password) {
   return data.data.jwt;
 }
 
-export async function createBook(bookData, token) {
+// 1. UPLOAD IMAGE (Call this first if the user selected a file)
+export async function uploadMedia(file, token) {
+  const WP_URL = process.env.NEXT_PUBLIC_WP_URL;
+  const res = await fetch(`${WP_URL}/wp/v2/media`, {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${token}`,
+      "Content-Disposition": `attachment; filename="${file.name}"`,
+      "Content-Type": file.type,
+    },
+    body: file,
+  });
+
+  if (!res.ok) throw new Error("Failed to upload image");
+  return res.json(); // Returns an object with an 'id'
+}
+
+// 2. CREATE BOOK (Now accepts an optional media ID)
+export async function createBook(bookData, token, featuredMediaId = null) {
+  const payload = {
+    title: bookData.title,
+    content: bookData.description,
+    status: "publish",
+    meta: {
+      book_price: bookData.price,
+      book_author: bookData.author,
+      book_description: bookData.description,
+      book_genre: bookData.genre,
+      book_posted_by: bookData.postedBy,
+    },
+  };
+
+  // Attach the image if an ID was provided
+  if (featuredMediaId) {
+    payload.featured_media = featuredMediaId;
+  }
+
   return fetchWP("/wp/v2/book", {
     method: "POST",
+    headers: { Authorization: `Bearer ${token}` },
+    body: JSON.stringify(payload),
+  });
+}
+
+// 3. UPDATE BOOK (For editing existing entries)
+export async function updateBook(bookId, bookData, token) {
+  return fetchWP(`/wp/v2/book/${bookId}`, {
+    method: "POST", // WordPress uses POST for updates
     headers: { Authorization: `Bearer ${token}` },
     body: JSON.stringify({
       title: bookData.title,
       content: bookData.description,
-      status: "publish",
       meta: {
         book_price: bookData.price,
         book_author: bookData.author,
@@ -100,5 +144,4 @@ export async function createBook(bookData, token) {
     }),
   });
 }
-
 

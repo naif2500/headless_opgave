@@ -1,4 +1,3 @@
-
 'use client'
 
 import { useEffect, useState, use } from 'react'
@@ -6,6 +5,16 @@ import { getBookBySlug } from '../../../lib/api'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useCart } from '../../../context/CartContext'
+
+// Helper function to safely get the image URL
+const getImageUrl = (book) => {
+  if (!book._embedded) return null;
+  const media = book._embedded['wp:featuredmedia'];
+  if (media && media[0] && media[0].source_url) {
+    return media[0].source_url;
+  }
+  return null;
+};
 
 function conditionColor(val) {
   if (val >= 70) return '#3B6D11'
@@ -42,7 +51,9 @@ function ConditionMeter({ value }) {
 }
 
 export default function BookPage({ params }) {
+  // Unwrap params using React.use()
   const { slug } = use(params)
+  
   const [book, setBook] = useState(null)
   const [loading, setLoading] = useState(true)
   const [activeThumb, setActiveThumb] = useState(0)
@@ -65,9 +76,8 @@ export default function BookPage({ params }) {
   if (loading) return <div className="page"><div className="loading">Indlæser...</div></div>
   if (!book) return <div className="page"><p>Bogen blev ikke fundet.</p></div>
 
-  const images = book.featuredImage?.node?.sourceUrl
-    ? [book.featuredImage.node.sourceUrl]
-    : []
+  const imageUrl = getImageUrl(book);
+  const images = imageUrl ? [imageUrl] : [];
 
   return (
     <div className="page">
@@ -76,7 +86,7 @@ export default function BookPage({ params }) {
         <span className="breadcrumb-sep">/</span>
         <Link href="/books" className="breadcrumb-link">Bøger</Link>
         <span className="breadcrumb-sep">/</span>
-        <span>{book.title}</span>
+        <span>{book.title?.rendered}</span>
       </div>
 
       <div className="product-layout">
@@ -85,7 +95,7 @@ export default function BookPage({ params }) {
             {images[activeThumb] ? (
               <Image
                 src={images[activeThumb]}
-                alt={book.title}
+                alt={book.title?.rendered}
                 fill
                 style={{ objectFit: 'cover', borderRadius: '8px' }}
               />
@@ -109,26 +119,41 @@ export default function BookPage({ params }) {
         </div>
 
         <div>
-          {book.genre && <span className="product-genre">{book.genre}</span>}
-          <h1 className="product-title">{book.title}</h1>
-          <p className="product-author">af {book.authorName}</p>
+          {book.book_genre && <span className="product-genre">{book.book_genre}</span>}
+          
+          <h1 className="product-title">{book.title?.rendered}</h1>
+          
+          <p className="product-author">af {book.book_author}</p>
+          
           {book.publishingDate && (
             <p className="product-pubdate">Udgivet: {book.publishingDate}</p>
           )}
-          {book.postedBy && (
-            <p className="product-posted-by">Sælges af: {book.postedBy}</p>
+          
+          {book.book_posted_by && (
+            <p className="product-posted-by">Sælges af: {book.book_posted_by}</p>
           )}
+          
           <p className="product-desc">
-            {book.description || (book.excerpt && book.excerpt.replace(/<[^>]*>/g, ''))}
+            {book.book_description}
           </p>
-          <div className="product-price">{book.price} kr</div>
-          <button
-            className={`add-to-cart${added ? ' added' : ''}`}
-            onClick={handleAddToCart}
-          >
-            {added ? '✓ Tilføjet til kurv' : 'Tilføj til kurv'}
-          </button>
-          <ConditionMeter value={book.condition || 80} />
+          
+          <div className="product-price">{book.book_price} kr</div>
+          
+          <div className="button-group" style={{ display: 'flex', gap: '10px', marginTop: '1rem' }}>
+            <button
+              className={`add-to-cart${added ? ' added' : ''}`}
+              onClick={handleAddToCart}
+            >
+              {added ? "Tilføjet!" : "Tilføj til kurv"}
+            </button>
+
+            {/* Edit Button */}
+            <Link href={`/books/edit/${slug}`} className="edit-book-btn" style={{ padding: '10px', background: '#eee', borderRadius: '5px', textDecoration: 'none', color: '#333' }}>
+              Rediger bog
+            </Link>
+          </div>
+          
+          <ConditionMeter value={book.book_condition || 80} />
         </div>
       </div>
     </div>

@@ -2,14 +2,24 @@ import { getBooks } from "../lib/api";
 import Link from "next/link";
 import Image from "next/image";
 
+// 1. Helper to safely get the image URL
+const getImageUrl = (book) => {
+  if (!book._embedded) return null;
+  const media = book._embedded['wp:featuredmedia'];
+  if (media && media[0] && media[0].source_url) {
+    return media[0].source_url;
+  }
+  return null;
+};
+
 export default async function Home() {
   const books = await getBooks();
-  const featured = books.slice(0, 5);
-  const popular = books.slice(5, 10);
+  // Ensure we have data before slicing
+  const featured = Array.isArray(books) ? books.slice(0, 5) : [];
+  const popular = Array.isArray(books) ? books.slice(5, 10) : [];
 
   return (
     <main>
-      {/* Hero */}
       <section className="hero">
         <div className="hero-overlay">
           <div className="hero-tag">Kuratérte brugte bøger</div>
@@ -24,7 +34,6 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* Featured carousel */}
       <section className="section">
         <div className="section-header">
           <h2 className="section-title">Udvalgte bøger</h2>
@@ -39,7 +48,6 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* Popular carousel */}
       {popular.length > 0 && (
         <section className="section section-alt">
           <div className="section-header">
@@ -59,14 +67,17 @@ export default async function Home() {
   );
 }
 
+// 2. Updated BookCard with correct field names
 function BookCard({ book }) {
+  const imageUrl = getImageUrl(book);
+
   return (
     <Link href={`/books/${book.slug}`} className="book-card">
       <div className="book-card-img">
-        {book.featuredImage?.node?.sourceUrl ? (
+        {imageUrl ? (
           <Image
-            src={book.featuredImage.node.sourceUrl}
-            alt={book.title}
+            src={imageUrl}
+            alt={book.title.rendered}
             fill
             style={{ objectFit: "cover" }}
           />
@@ -75,11 +86,11 @@ function BookCard({ book }) {
         )}
       </div>
       <div className="book-card-body">
-        <div className="book-card-title">{book.title}</div>
-        <div className="book-card-author">{book.authorName}</div>
+        <div className="book-card-title">{book.title.rendered}</div>
+        <div className="book-card-author">{book.book_author}</div>
         <div className="book-card-footer">
-          <span className="book-card-price">{book.price} kr</span>
-          <span className="book-card-genre">{book.genre}</span>
+          <span className="book-card-price">{book.book_price} kr</span>
+          <span className="book-card-genre">{book.book_genre}</span>
         </div>
       </div>
     </Link>
