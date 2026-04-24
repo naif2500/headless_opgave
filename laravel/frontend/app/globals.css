@@ -318,14 +318,42 @@ body { font-family: 'DM Sans', sans-serif; background: #f9f7f4; color: #1a1a1a; 
 
 
 /* LOGIN */
-.login-page-layout { display: flex; justify-content: space-between; align-items: center; height: 80vh; background-color: red; }
-.login-container{ display: flex; flex-direction: column; background-color: blue; }
+.login-page-layout { display: flex;
+    justify-content: space-between;
+     align-items: center; height: 80vh;
+     background-color: red; }
+
+.login-container{ display: flex;
+     flex-direction: column;
+    background-color: black;
+padding-left: 32px;  }
+
 .login-form {
-  background: #fff;
+  background: pink;
   padding: 2rem;
   border-radius: 8px;
   box-shadow: 0 12px 32px rgba(0,0,0,0.1);
   width: 320px;
+  display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.background-image{
+background-color: white;
+width: 50%;
+
+}
+.background-image img{
+    width: 500px;
+    height: 500px;
+}
+.login-form > input{
+    width: 100px;
+
+}
+.login-buttons{
+    display: flex;
+    gap: 1rem;
 }
 /* SUCCESS */
 .success-page { text-align: center; padding: 5rem 2rem; }
